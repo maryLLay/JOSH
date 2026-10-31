@@ -1,0 +1,42 @@
+---
+import Link from "@components/Link.astro";
+const { frontmatter } = Astro.props;
+---
+
+{
+  (frontmatter["OSSI proposal link"] ||
+    frontmatter["additional links array"]) && (
+    <div class="flex flex-wrap mb-2 gap-x-3">
+      <p class="font-semibold mb-1">External links:</p>
+
+      {frontmatter["OSSI proposal link"] ? (
+        <div class="mb-1 proposal-download">
+          <Link
+            text="OSSI funding proposal"
+            url={frontmatter["OSSI proposal link"]}
+          />
+        </div>
+      ) : null}
+
+      {frontmatter["additional links array"] ? (
+        frontmatter["additional links array"].length === 1 ? (
+          <div class="mb-1">
+            <Link
+              text={frontmatter["additional links text array"]}
+              url={frontmatter["additional links array"]}
+            />
+          </div>
+        ) : (
+          frontmatter["additional links array"].map((link, index) => (
+            <div class="mb-1">
+              <Link
+                text={frontmatter["additional links text array"][index]}
+                url={link}
+              />
+            </div>
+          ))
+        )
+      ) : null}
+    </div>
+  )
+}

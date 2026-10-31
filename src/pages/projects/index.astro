@@ -1,0 +1,112 @@
+---
+import "@styles/tailwind.css";
+import { siteConfig } from "../../siteConfig";
+import { getCollection } from "astro:content";
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Hero from "@components/Hero.jsx";
+import CardContainer from "@components/projects/CardContainer";
+import CardContent from "@components/projects/CardContent.astro";
+import CardImage from "@components/projects/CardImage";
+import FilterMenu from "@components/projects/FilterMenu";
+import ResetProjectTypeBtn from "@components/projects/ResetProjectTypeBtn";
+import ProjectCount from "@components/projects/ProjectCount";
+import ProjectTypeBtns from "@components/projects/ProjectTypeBtns";
+import ProjectTypeDropdown from "@components/projects/ProjectTypeDropdown";
+import SearchInput from "@components/projects/SearchInput";
+import Tag from "@components/projects/Tag.astro";
+import ToggleFilterMenuBtn from "@components/projects/ToggleFilterMenuBtn";
+
+import { getTagKeysAndValues } from "@utils/getTags";
+
+const pageTitle = "OSSI-supported projects";
+const allProjects = await getCollection("projects");
+
+// uniqueTags is an object where keys = unique tag categories, values = unique tags within a category, both across allProjects. All lowercase.
+// used to populate the filter menu
+const uniqueTags = getTagKeysAndValues(allProjects);
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <Hero
+    client:load
+    title=`${siteConfig.shortName} Software Projects`
+    subtitle=`${siteConfig.name} (${siteConfig.acronymOnly}) supported software projects and other software developed at Janelia`
+    heightClasses="h-96"
+    paddingClasses="md:px-6 lg:px-20 xl:px-32 lg:mx-0 max-w-7xl"
+    captionAlignment="lg:left-20 xl:left-32"
+  />
+  <section
+    class="px-6 lg:px-20 xl:px-32 py-6 md:py-12 lg:py-20 w-full max-w-6xl lg:max-w-none 2xl:w-11/12 md:grid grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4"
+  >
+    <div class="col-start-1 col-span-1">
+      <SearchInput client:load />
+      <ToggleFilterMenuBtn client:only="react" />
+      <FilterMenu uniqueTags={uniqueTags} client:only="react" />
+    </div>
+    <div class="col-start-2 col-span-2 3xl:col-span-3 4xl:col-span-4">
+      <ProjectTypeBtns client:only="react" />
+      <div class="md:hidden flex flex-col gap-6 items-end min-w-full">
+        <div class="flex gap-2 w-full">
+          <h3 class="font-bold">Filter by OSSI funding status</h3>
+          <ResetProjectTypeBtn client:load />
+          <ProjectTypeDropdown client:visible />
+        </div>
+      </div>
+      <ProjectCount
+        allContent={allProjects}
+        contentType="projects"
+        client:only="react"
+      />
+      <div
+        class="lg:grid grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 auto-rows-max gap-4"
+      >
+        {
+          allProjects.map((content) => {
+            const tagsObj = getTagKeysAndValues(content);
+            return (
+              <CardContainer
+                key={content.id}
+                url={`/projects/${content.id}/`}
+                title={content.data.title}
+                tagsObj={tagsObj}
+                projectType={content.data["project type"][0]}
+                contentType="projects"
+                maxLength={allProjects.length}
+                client:only="react"
+              >
+                {content.data["image file"] ? (
+                  <img
+                    src={`/project-images/${content.data["image file"]}`}
+                    class="w-full h-40 object-cover object-center bg-white"
+                    loading="lazy"
+                    slot="cardImage"
+                  />
+                ) : (
+                  <CardImage slot="cardImage" client:only="react" />
+                )}
+
+                <CardContent
+                  title={content.data.title}
+                  authors={content.data["author names"]}
+                  tagline={content.data.tagline}
+                  tagsObj={tagsObj}
+                  slot="cardContent"
+                />
+                <Fragment slot="tags">
+                  {Object.entries(tagsObj).map(([tagCat, tags]) => {
+                    return tags.map((tag) => {
+                      return (
+                        <Tag tagCat={tagCat} tag={tag} contentType="projects" />
+                      );
+                    });
+                  })}
+                </Fragment>
+              </CardContainer>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

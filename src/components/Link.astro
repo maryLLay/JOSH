@@ -1,0 +1,15 @@
+---
+import { twMerge } from "tailwind-merge";
+const { text, url, textClasses } = Astro.props;
+---
+
+<a
+  class={twMerge(
+    "underline transition ease-in duration-200 hover:text-primary dark:text-slate-300 dark:hover:text-accent cursor-pointer",
+    textClasses
+  )}
+  href={url}
+  target="_blank"
+>
+  {text}
+</a>

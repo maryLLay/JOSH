@@ -1,0 +1,14 @@
+---
+import Link from "@components/Link.astro";
+const { citationLink, citationText, githubLink } = Astro.props;
+---
+
+{
+  citationLink && citationText ? (
+    <Link url={citationLink} text={citationText} />
+  ) : citationText ? (
+    <p>{citationText}</p>
+  ) : (
+    <Link url={githubLink} text={"Cite the GitHub repository"} />
+  )
+}

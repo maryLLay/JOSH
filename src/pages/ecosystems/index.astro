@@ -1,0 +1,128 @@
+---
+import "@styles/tailwind.css";
+
+import { getCollection, getEntries } from "astro:content";
+
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Hero from "@components/Hero.jsx";
+import FilterMenu from "@components/projects/FilterMenu";
+import ToggleFilterMenuBtn from "@components/projects/ToggleFilterMenuBtn";
+import ProjectCount from "@components/projects/ProjectCount";
+import CardContainer from "@components/projects/CardContainer";
+import CardImage from "@components/projects/CardImage";
+import CardContent from "@components/projects/CardContent.astro";
+import SearchInput from "@components/projects/SearchInput";
+import Tag from "@components/projects/Tag.astro";
+
+import { getTagKeysAndValues } from "@utils/getTags";
+
+//allEcosystems gets passes as "content" to the content cards
+//eveything else happening in here is to make tags for the filter menu and cards
+const allEcosystems = await getCollection("ecosystems");
+//For each ecosystem, return an array of all the related projects to the object allRelatedProjects.
+//This will be used to create the list of tags for the ecosystem filter menu.
+const allRelatedProjects = await Promise.all(
+  allEcosystems.map(async (ecosystem) => {
+    const relatedProjects = await getEntries(
+      ecosystem.data["related projects"]
+    );
+    //Also for each ecosystem within allEcosystems, add a property ecosystem.data.tagsObj that consists of the unique tags
+    //extracted from the relatedProjects subset of the project content collection.
+    //This will be used to create the tags on each individual ecosystem card.
+    ecosystem.data.tagsObj = getTagKeysAndValues(relatedProjects);
+    // console.log(ecosystem.data.tagsObj);
+
+    return relatedProjects;
+  })
+);
+//allRelatedProjects is wrapped in an extra set of square brackets. This just removes them.
+//flattenedRelatedProjects is only used to create uniqueTags
+const flattenedRelatedProjects = allRelatedProjects.reduce(
+  (acc, currentArray) => acc.concat(currentArray),
+  []
+);
+const uniqueTags = getTagKeysAndValues(flattenedRelatedProjects);
+---
+
+<BaseLayout>
+  <Hero
+    client:load
+    title="Software Ecosystems"
+    subtitle="Multiple programs that work together to form a computational ecosystem"
+    heightClasses="h-80"
+    paddingClasses="md:px-6 lg:px-20 xl:px-32 lg:mx-0 max-w-7xl"
+    captionAlignment="lg:left-20 xl:left-32"
+  />
+  <section
+    class="px-6 lg:px-20 xl:px-32 py-6 md:py-12 lg:py-20 w-full max-w-6xl lg:max-w-none 2xl:w-11/12 md:grid grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4"
+  >
+    <div class="col-start-1 col-span-1">
+      <SearchInput client:load />
+      <FilterMenu uniqueTags={uniqueTags} client:only="react" />
+    </div>
+    <div class="col-start-2 col-span-2 3xl:col-span-3 4xl:col-span-4">
+      <div class="md:hidden flex flex-col gap-6 items-end min-w-full">
+        <ToggleFilterMenuBtn uniqueTags={uniqueTags} client:only="react" />
+      </div>
+      <ProjectCount
+        allContent={allEcosystems}
+        contentType="ecosystems"
+        client:only="react"
+      />
+      <div
+        class="lg:grid grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 auto-rows-max gap-4"
+      >
+        {
+          allEcosystems.map((content) => {
+            return (
+              <CardContainer
+                key={content.id}
+                url={`/ecosystems/${content.id}/`}
+                title={content.data.title}
+                tagline={content.data.tagline}
+                tagsObj={content.data.tagsObj}
+                projectType={null}
+                contentType="ecosystems"
+                client:only="react"
+              >
+                {content.data["image file"] ? (
+                  <img
+                    src={`/project-images/${content.data["image file"]}`}
+                    class="w-full h-40 object-cover object-center"
+                    loading="lazy"
+                    slot="cardImage"
+                  />
+                ) : (
+                  <CardImage slot="cardImage" client:only="react" />
+                )}
+
+                <CardContent
+                  title={content.data.title}
+                  authors={content.data["author names"]}
+                  tagline={content.data.tagline}
+                  tagsObj={content.data.tagsObj}
+                  slot="cardContent"
+                />
+                <Fragment slot="tags">
+                  {Object.entries(content.data.tagsObj).map(
+                    ([tagCat, tags]) => {
+                      return tags.map((tag) => {
+                        return (
+                          <Tag
+                            tagCat={tagCat}
+                            tag={tag}
+                            contentType="ecosystems"
+                          />
+                        );
+                      });
+                    }
+                  )}
+                </Fragment>
+              </CardContainer>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

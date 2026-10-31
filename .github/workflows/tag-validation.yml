@@ -1,0 +1,97 @@
+name: Validate tag values in project MD files
+
+# This workflow is triggered on PRs to main branch on the repository
+on:
+  pull_request_target:
+    branches: main
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      # Checkout the base branch so all scripts run from trusted code.
+      # Only the changed markdown files are taken from the PR.
+      - name: Checkout base
+        uses: actions/checkout@v4
+
+      - name: Get changed markdown files from PR
+        id: changed-markdown-files
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          git fetch --no-tags origin "pull/${PR_NUMBER}/merge"
+          # Merge commit's first parent is the base branch tip.
+          changed=$(git diff --name-only --diff-filter=AM FETCH_HEAD^1 FETCH_HEAD -- '*.md' '*.mdx' \
+            | grep -v -E '(^|/)(_project-template\.md|tagsList\.md|README\.md|CONTRIBUTING\.md|LICENSE-3-clause-BSD\.md|LICENSE-MIT\.md)$' || true)
+          if [ -n "$changed" ]; then
+            echo "$changed" | xargs git checkout FETCH_HEAD --
+            echo "any_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "any_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "all_changed_files=$(echo $changed)" >> "$GITHUB_OUTPUT"
+
+      - name: List all changed files markdown files
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
+      - name: Setup node
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install npm dependencies
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        run: npm ci
+        working-directory: .github/actions
+
+      - name: Lint MD frontmatter for changed files
+        id: lint-md
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+        run: node .github/actions/validate-tags.js
+
+      - name: Check if validation report exists
+        id: check-report
+        run: |
+          if [ -f validation-report.md ]; then
+            echo "report-exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "report-exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment PR with validation report
+        if: steps.check-report.outputs.report-exists == 'true'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: validation-report.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fail if validation report exists
+        run: |
+          if [ -f validation-report.md ]; then
+            echo "Validation report found, indicating issues. Failing the check..."
+            exit 1
+          else
+            echo "No validation report found. Proceeding..."
+          fi
+
+      - name: If no validation report, leave thank you
+        if: steps.check-report.outputs.report-exists == 'false'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            ## :tada: Thank you for your contribution!
+            The website maintainers will review your PR soon.
+          comment_tag: success
