@@ -12,6 +12,11 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+  # Rebuilds nightly so project details fetched from GitHub and Figshare at
+  # build time stay up to date (scheduled runs use the default branch)
+  schedule:
+    - cron: "17 6 * * *"
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -27,7 +32,8 @@ concurrency:
 env:
   BUILD_PATH: "." # default value when not using subfolders
   # BUILD_PATH: subfolder
-  OSSI_SITE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # Used for build-time GitHub API calls (raises the rate limit; read-only)
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:

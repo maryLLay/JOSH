@@ -1,362 +1,149 @@
 # Contributing Guidelines
 
+How to add or edit a hardware project on the JOSH website. Each project is one Markdown file in `src/content/projects/`.
+
 ## Contents
 
 - [Quick reference](#quick-reference)
-- [Prerequesites](#prerequisites)
+- [Prerequisites](#prerequisites)
 - [Set-up](#set-up)
 - [Add a new project](#add-a-new-project)
-- [Edit a project](#edit-a-project)
-  - [Edit the frontmatter](#edit-the-frontmatter)
-  - [Guidance for tag variables](#guidance-for-tag-variables)
-  - [Optional - edit the project description](#optional---edit-the-project-description)
-  - [Optional - add an image](#optional---add-an-image)
-  - [Requesting new tag categories or options](#requesting-new-tag-categories-or-options)
-- [Preview and push your changes to GitHub](#preview-your-project-page-and-push-your-changes-to-github)
+- [The frontmatter fields](#the-frontmatter-fields)
+- [Where your project is hosted](#where-your-project-is-hosted)
+- [Tags](#tags)
+- [Optional: project description and image](#optional-project-description-and-image)
+- [Preview your page](#preview-your-page)
 - [Open a pull request](#open-a-pull-request)
+- [Removing the placeholder projects](#removing-the-placeholder-projects)
 
 ## Quick reference
 
-The main steps of contributing to this repo. Read on or refer to specific sections, listed above, for additional details.
-![The main three steps for contributing to this repo - 1. fork and clone the repo, 2. add or edit a project following the project template, and 3. create a pull request against this repo's main branch](./public/readme-images/quick-ref-contributing-to-ossi-site.png)
+1. Fork and clone this repository.
+2. Copy `src/content/projects/_project-template.md`, rename it for your project, and fill in the frontmatter.
+3. Preview it locally, then open a pull request against `main`. An automated check validates your tags.
 
 ## Prerequisites
 
-1. A **[GitHub account](https://docs.GitHub.com/en/get-started/quickstart/creating-an-account-on-GitHub)**
-2. A **code editor** (e.g., [Visual Studio Code](https://code.visualstudio.com/download)) installed on your local computer
-3. **Git** installed on your local computer
-   - Need to install Git? [Download it here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
-4. **Node.js (v18.14.1 or later) and npm** (comes installed with Node) installed on your local computer
-   - Need to install Node? [Download it here](https://nodejs.org/en/download).
+1. A [GitHub account](https://docs.github.com/en/get-started/quickstart/creating-an-account-on-github).
+2. A code editor (for example [Visual Studio Code](https://code.visualstudio.com/download)).
+3. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+4. [Node.js](https://nodejs.org/en/download) 22.23.4 or later, which includes npm.
 
-<details>
-  <summary>Want to check if you have Git, Node, and npm installed, or to confirm that your installation worked?</summary>
-  
-<br/>Use the below commands in the terminal. If the software is successfully installed, each command will return the corresponding software's version number to the terminal.
-
-```
-git -v
-node -v
-npm -v
-```
-
-</details>
+To check your installs, run `git -v`, `node -v` and `npm -v` in a terminal. Each should print a version number.
 
 ## Set-up
 
-<details>
- <summary> 
-   
-   #### Fork the OSSI website repository to create your own copy of the repository on your GitHub account.
-   
- </summary>
-  
-  1.  On GitHub.com, naviagate to the [JaneliaSciComp/ossi-website](https://github.com/JaneliaSciComp/ossi-website) repository page.
-  
-  2.  In the upper-right corner of the page, click **Fork**.
-    ![Fork button on the GitHub repository page](./public/readme-images/fork.png)
+1. On GitHub, open this repository and click **Fork** (upper right). The defaults are fine.
+2. On your fork, click the green **Code** button, choose the **SSH** tab and copy the address. If GitHub reports you have no SSH key, [generate one](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) and [add it to your account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
+3. In a terminal, move to where you want the project and clone your fork:
 
-3.  On the next page, you can keep the defaults and click **Create Fork** in the lower right. Or, optionally, you can change the repository name or description to be different than ossi-website, to further distinguish your copy from the original repository.
+   ```
+   git clone git@github.com:YOUR-USERNAME/YOUR-REPO-NAME.git
+   cd YOUR-REPO-NAME
+   ```
 
-</details>
-<details>
- <summary> 
-   
-   #### Clone your forked repository, to make it available on your local computer.
-   
- </summary>
-  
-  1.  On the [JaneliaSciComp/ossi-website](https://github.com/JaneliaSciComp/ossi-website) repository page, above the list of files, click the green **Code** button.
+4. Install dependencies and start the local dev server:
 
-2.  In the dropdown that appears, select the **SSH** tab.
+   ```
+   npm install
+   npm run dev
+   ```
 
-3.  Click the **Copy** icon found to the right of the SSH key.
-    ![Green code button and associated dropdown menu on the GitHub repository page](./public/readme-images/clone.png)
-
-**Note**: If you see an error like the below when attempting to copy the SSH key, please follow the GitHub instructions to [generate a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) and [add the SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
-![Error message on GitHub.com indicating the account does not have a public SSH key](./public/readme-images/SSH-error.png)
-
-4.  Open a new terminal in your code editor.
-
-5.  Change the current working directory to the location where you want the cloned directory, e.g.,:
-
-```
-cd PATH/TO/DESIRED/LOCATION/HERE
-```
-
-6.  Type `git clone` and then paste the SSH key you just copied. E.g.,:
-
-```
-git clone git@github.com:YOUR-USERNAME/YOUR-REPO-NAME.git
-```
-
-7.  Hit enter to clone the repo onto your local computer. You should see output in the terminal like the below.
-    ![Sample terminal output after using the command to clone a GitHub repo](./public/readme-images/clone-2.png)
-
-</details>
-<details open>
-<summary>
-  
-  #### Install the repository dependencies and start the local dev server to preview a local copy of the website.
-  
-</summary>
-  
-  1.  In the terminal of the code editor, navigate to your local directory with the cloned repo.
-
-```
-cd path/to/local/YOUR-REPOSITORY-NAME
-```
-
-2.  Type the below two commands in the terminal - the first command directs npm to install dependencies specific to the repo and the second starts the local server and opens it automatically in your default web browswer.
-
-```
-npm install
-npm run dev
-```
-
-**Notes:**
-
-- If the local server does not automatically appear in your web browser, input `localhost:4321` into your preferred web browser to view the website.
-- Navigating to `localhost:4321` before the local server has started will result in an error page. You can tell the local server has started when you see a message in your terminal that looks something like this:
-  ![Terminal message consisting of a green box that reads "astro" in black text, followed by the astro version number in green text, then grey and white text theat reads "ready in 317 ms."](./public/readme-images/astro-ready.png)
-
-</details>
+   If the site does not open on its own, go to `localhost:4321`. The server is ready when the terminal prints a line like "ready in 317 ms".
 
 ## Add a new project
 
-Below is an abbreviated file tree showing key folders and files you'll find in your local copy of the repository.
-**If a Markdown file for your project already exists in `src/content/projects` - skip to [Edit a project](#edit-a-project).**
+**If a file for your project already exists in `src/content/projects/`, skip to [The frontmatter fields](#the-frontmatter-fields).**
 
-```text
-/
-├── public/
-│   └── project-images/
-└── src/
-    └── content/
-        └── projects/
-            └── _project-template.md
-```
+1. Copy `src/content/projects/_project-template.md` into the same folder.
+2. Rename the copy after your project, in **lowercase with dashes instead of spaces**, for example `head-positioner.md`. The file name becomes the page address (`/projects/head-positioner/`).
+3. Open the file. The data between the triple dashes (`---`) at the top is called **frontmatter**, and it fills in the project page.
 
-1. Copy `/src/content/projects/_project-template.md` and paste a duplicate of the file into the same folder (`/src/content/projects/`). Rename the template file with your software project's title in **lowercase**, with dashes replacing spaces.
-   - For example, if your software is called "Awesome Software", you would rename the file as `awesome-software.md`.
-   - If your software is called "AwesomeSoftware", the file name would be `awesomesoftware.md`
+## The frontmatter fields
 
-Open your project file to view its contents. At the top of the file are data sandwiched between triple-dashes (---). These data are collectively called **frontmatter** and are used by Astro to populate the webpage content for a project.
+Follow the examples in `_project-template.md`.
 
-2. **Start by editing the `title` field. The title value must match the name of your project file name with each dash converted to a space**, but it can have whatever casing you desire.
-   - For example, if your project file is named `awesome-software.md`, your `title` entry can appear as:
-     `title: Awesome Software` or
-     `title: AWESOME SOFTWARE` or
-     `title: AWEsome Software` etc...
-     But the title cannot be `title: AwesomeSoftware` - this is equiavlent to a file name of `awesomesoftware.md`.
+- Every **required** field needs a value, or the site will show an error when you preview the page.
+- For an **optional** field you do not want, delete the whole entry or comment it out with `#`.
+- If a value contains a colon, wrap the whole value in quotes. If it also needs quotation marks, use single quotes inside and wrap the value in double quotes.
 
-## Edit a project
+| Field | Required? | How to complete |
+| :-- | :-- | :-- |
+| `title` | Required | Your project title. |
+| `tagline` | Required | One or two sentences describing the project. |
+| `maintainer` | Required | The one person responsible for this page. Used internally and not shown on the site. |
+| `repository link` | Required | Where the project is hosted. See [Where your project is hosted](#where-your-project-is-hosted). |
+| `documentation link` | Optional | Link to documentation, if separate from the repository link. |
+| `preferred contact method` | Optional | A link or `mailto:` address for the "Reach out with a question" button. |
+| `how to cite text` | Optional | A citation. Overrides the citation supplied by the repository (see below). Wrap in quotes. |
+| `how to cite link` | Optional | A DOI link, starting `https://doi.org/`. Only used together with `how to cite text`. |
+| `additional links array` | Optional | Extra links as a list, for example a project homepage or a publication. Wrap links containing a colon in quotes. |
+| `additional links text array` | Optional | The display text for each extra link, in the same order. |
+| `image file` | Optional | The file name of an image in `public/project-images/`, with no spaces. One image is supported. |
+| `image caption` | Required if you add an image | A short description of the image. |
+| `youtube url` | Optional | Link to a YouTube video. |
+| `youtube caption` | Required if you add a video | A short description of the video. |
+| `youtube params` | Optional | Any [YouTube player parameters](https://developers.google.com/youtube/player_parameters#Parameters). |
+| `file types`, `license`, `hardware type`, `development team`, `CAD/EDA`, `use case` | Optional | [Tags](#tags). |
 
-At the top of your project file are data sandwiched between triple-dashes (---). These data are collectively referred to as **frontmatter** and are used by Astro to populate the content on your project's webpage.
+## Where your project is hosted
 
-### Edit the frontmatter
+Set `repository link` to the main page of your project. The site fetches details from it when the site is built.
 
-- Follow the examples and guidance in `/src/content/projects/_project-template.md` to fill out your project file's frontmatter. Additional details are provided in a table below.
+| Host | What to use | What appears on the project page |
+| :-- | :-- | :-- |
+| **Figshare** | The clean record URL, for example `https://janelia.figshare.com/articles/physical_object/Project_name/12345678`. Remove any `?file=...` ending. | The record's description, authors, DOI, license, publish date and citation. If the record's file entry links to another site such as GitHub, that appears as "Project files on GitHub". |
+| **GitHub** | The repository URL, for example `https://github.com/ORG/REPO`. The repository must be public. | The repository's README, and an "Open an issue on GitHub" link. |
+| **Anywhere else** (for example Janelia.org or Flintbox) | The project's page URL. | Nothing is fetched. Write the page content in the body of your project file (below the closing `---`). |
 
-- For each **required** field, you must provide a value or an error will be thrown when you try to view your project page on the local server.
+Notes:
 
-- For each **optional** field, **if you do not wish to provide a value you must comment out or delete the entire entry.**
+- The fetched content is shown for display only. Filters and search use your frontmatter tags.
+- Citation priority: your `how to cite text`, then the citation from the Figshare record, then a link to the repository.
+- If a fetch fails when the site is built, the page falls back to any text in the body of your project file.
+- Text you write in the body of your project file always replaces the fetched README or description.
 
-- A formatting note for all fields - if you use a colon in your provided value, you must wrap the entire phrase in quotes. Similarly, if you need to use quotation marks in the value, use single quotes and then wrap the entire phrase in double quotes. Otherwise, quotes are optional.
+## Tags
 
-<details>
- <summary>
+Tags let visitors filter projects. The tag fields are `file types`, `license`, `hardware type`, `development team`, `CAD/EDA` and `use case`.
 
-#### Table with detailed guidance for project data fields
+- **Use only the options in [`.github/actions/validTagsList.json`](.github/actions/validTagsList.json)**, which is the list the automated check uses. Spelling and capitalization must match exactly.
+- Keep the options that apply, inside square brackets and separated by commas. Delete the options that do not apply. If a whole category does not apply, delete or comment out the category.
+- **List every file type in your download**, including proprietary ones. Options marked "(proprietary)" need commercial software to open, so visitors know this before they download.
+- If you feel an extra tag **option** is needed, add it to your project file and say so in your pull request. The check will flag it for the maintainer to review.
+- If you feel an extra tag **category** is needed, do not add it to your project file. Open a separate pull request that explains why.
 
- </summary>
-  
-  | Field name                       | Required or optional                                                                                      | How to complete                                                                                                                                                                                                                                                                                                              |
-| :------------------------------- | :-------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`                          | Required                                                                                                  | Your project title.                                                                                                                                                                                                                                                                                                          |
-| `tagline`                        | Required                                                                                                  | One or two sentences describing your project.                                                                                                                                                                                                                                                                                |
-| `maintainer`                     | Required                                                                                                  | The maintainer of the project page on this website. This should be the name of one primary point-of-contact.                                                                                                                                                                                                                 |
-| `project type`                   | Required                                                                                                  | Pick **one** of the three options provided in the template based on whether your software project is currently or was ever supported by OSSI: `[OSSI - current, OSSI - previous, Other]`. Delete the other two options, leaving the square brackets around your choice.                                                      |
-| `OSSI project status`             | Required for current and previous OSSI-funded projects                                                    | Pick one option: `[Proposed, Accepted, Active Development, Maintenance]`. Leave the square brackets around your choice.                                                                                                                           |
-| `OSSI proposal link`             | Required for current and previous OSSI-funded projects                                                    | Preferred: upload the proposal as a PDF to `public/proposals` and provide the link in the format `./../proposals/PROPOSAL.pdf`. Other option: provide the URL to the externally hosted proposal.                                                                                                                             |
-| `github link`                    | Required                                                                                                  | Link to the software project's GitHub repository.                                                                                                                                                                                                                                                                            |
-| `documentation link`             | Required                                                                                                  | Link to software documentation - can be the same as the GitHub repo if the README is the documentation                                                                                                                                                                                                                       |
-| `installation instructions link` | Required                                                                                                  | Link to software installation instructions - can be the same as the GitHub repo                                                                                                                                                                                                                                              |
-| `preferred contact method`        | Encouraged if there is a preferred way for users to reach out for help other than creating an issue in the project's GitHub repo.                                                                                                | Examples: link to Image.sc forum, or an email in the format of mailto:email@example.com. Used to create the link for the 'Reach out for help' button on the project page.  |
-| `how to cite text`               | Required if your software has an associated published paper or DOI                                        | The citation for your software - wrap in quotes to ensure colons are interpreted correctly. If your software doesn't have an associated published paper or DOI, leave this blank.                                                                                                                                            |
-| `how to cite link`               | Optional. </br> _Reminder - comment out or delete optional fields you do not wish to provide a value for_ | A DOI. Wrap in quotes to ensure the colon is interpreted correctly. If a DOI is not available, leave this blank - your GitHub repo will be used as the default. Each DOI should start with `https://doi.org/`                                                                                                                |
-| `additional links array`         | Optional                                                                                                  | Optional external links formatted in a comma-separated array. If there is a colon in a link, wrap the entire link in quotations. For example, you could provide links to a project homepage, an externally-hosted blog post, additional publications, etc.                                                                   |
-| `additional links text array`    | Optional                                                                                                  | If you provided additional links, provide the description you wish to appear for each link in square brackets. If you provided more than one additional link, separate the description for each by commas.                                                                           |
-| `image file`                     | Optional                                                                                                  | Format as: `image-file-name-with-no-spaces.fileExtension`<br/> Then see [Adding an image](#optional---add-an-image) for more information about uploading an image. Note - only one image file is supported at this time.                                                                                                     |
-| `image caption`                  | Required if you add an image file                                                                         | A brief description of the image - this will be displayed on the site                                                                                                                                                                                                                                                        |
-| `youtube url`                    | Optional                                                                                                  | Link to a YouTube-hosted video demoing your software.                                                                                                                                                                                                                                                                        |
-| `youtube caption`                | Required if you add a video link                                                                          | A brief description of the video - this will be displayed on the site                                                                                                                                                                                                                                                        |
-| `youtube params`                | Optional                                                                          |  Supports any YouTube params: https://developers.google.com/youtube/player_parameters#Parameters. See Astro Embed documentation for more guidance: https://astro-embed.netlify.app/components/youtube/#params                                                                                                                                                                                                                                                        |
-| `development team`               | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `programming language`           | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `open source license`            | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `software type`                  | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `use case`                       | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `usage environment`              | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `software ecosystem`             | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
-| `supported file types`           | Optional                                                                                                  | [Tag variable - see guidance](#guidance-for-tag-variables)                                                                                                                                                                                                                                                                   |
+## Optional: project description and image
 
-</details>
+**Description.** Leave the body of your project file empty to show the fetched README or description. To write your own, type Markdown below the closing `---` ([Markdown syntax guide](https://www.markdownguide.org/basic-syntax/)). If the template's instruction text is still there, it is ignored.
 
-### Guidance for "tag" fields
+**Image.** Add the image to `public/project-images/` with a file name without spaces, then set `image file` and `image caption`. The image is used on the project's card.
 
-Tags are used to allow website visitors to filter displayed projects.
+## Preview your page
 
-- **Use only the tag categories and options provided in the project template.** If the spelling or capitalization is incorrect, you will be asked to go back and edit the your project file to ensure consistency across projects.
-- Delete any tag options provided in the project template that don't apply to your project. Keep relevant tags inside the square brackets, separated by commas.
-- If an entire tag category is not relevant to your project, delete or comment out the entire category and associated options.
-  ![Sample tag categories and options from the project template](./public/readme-images/tags.png)
-- We strive to keep the tag categories and example options up-to-date in the project template, but the final reference for the currently-allowed tag categories and options can always be found [here](https://github.com/JaneliaSciComp/ossi-website/blob/main/.github/actions/validTagsList.json).
+1. Save your changes and make sure the dev server is running (`npm run dev`).
+2. Open `localhost:4321/projects/YOUR-FILE-NAME`. You should also see your project on the main page and in the table view.
 
-<details>
-  <summary>
-
-#### If you feel there is an additional tag **option** required to describe your project
-
-  </summary>
-
-- Go ahead and add the option(s) to your project file. In your pull request, please note you added the option and provide a brief explanation why. When you open your pull request, these new options will throw a warning for the website maintainer for review.
-</details>
-<details>
-  <summary>
-
-#### If you feel there is an additional tag **category** required to describe your project
-
-  </summary>
-
-- _Do not add the new tag category to your project's template - this will prevent your project page from displaying in your local server._
-- Open a separate [pull request](#open-a-pull-request) listing the new tag category(ies) with a brief explanation of why you feel the addition is necessary.
-
-</details>
-
-<details>
-  <summary>
-
-### Optional - Edit the project description
-
-  </summary>
-You are strongly encouraged to use your software project's GitHub README as it's description. This will minimize the amount of work required by the maintainer to keep the project description and details up-to-date.
-
-To use your project's GitHub README as the project description:
-
-1. Ensure your project is public on GitHub
-2. If the template text is still in the Markdown file following the closing triple dashes (---) on the frontmatter - leave it. If you replaced this text with something else, delete everything below the triple dashes.
-
-If you would rather provide a custom project description, you can do so by typing it below the closing triple dashes on the frontmatter. You can use [Markdown syntax](https://www.markdownguide.org/basic-syntax/) to add hyperlinks, layout/text effects (e.g., headings, lists, **bold** or _italic_ text), etc.
-
-</details>
-
-<details>
-  <summary>
-
-### Optional - Add an image
-
-  </summary>
-
-1. Add your desired image to `/public/project-images/`, using a filename without spaces.
-2. Edit your project file to include a value for `image file` as outlined in the [table above](#edit-the-frontmatter).
-
-</details>
-
-## Preview your project page and push your changes to GitHub
-
-<details open>
-  <summary>
-
-#### Preview your project page on the local dev server.
-
-  </summary>
-
-1.  Make sure you've saved all your changes on your local computer.
-
-2.  If you don't already have the local dev server running, follow [Step 3 in **Set Up**](#set-up).
-
-3.  Navigate in your web browser to:
+When you are happy with it, commit and push:
 
 ```
-localhost:4321/projects/<your-project-name>
-```
-
-</details>
-
-<details>
-<summary>
-
-#### When you're done editing the project file and adding optional images, commit your changes and push them to GitHub.
-
-</summary>
-
-1.  Commit your project file locally by typing the following in your code editor's terminal.
-
-- Note: If you added an image file, you will also need to `git add public/project-images/YOUR-PROJECT-IMAGE-FILE`
-
-```
-git add src/content/projects/YOUR-PROJECT-NAME.md
+git add src/content/projects/YOUR-FILE-NAME.md
 git commit -m "Add YOUR PROJECT NAME"
-```
-
-2.  Push your changes to your online GitHub repository by entering the following in your code editor's terminal. Note - this code snippet assumes you are working on the default "main" branch. If you created a branch in your GitHub repo for this specific change, edit "main" to your branch name below.
-
-```
 git push origin main
 ```
 
-</details>
+If you added an image, also run `git add public/project-images/YOUR-IMAGE-FILE`. If you are working on a branch instead of `main`, use its name in the last command.
 
 ## Open a pull request
 
-<details>
-  <summary>
-Open a pull request to the main branch, keeping the defaults in place. Title the PR with your project name and whether you are adding or editing it. Optionally, add a description with any specific details or requests.
-  </summary>
+1. On your fork on GitHub, choose **Pull requests**, then **New pull request**.
+2. Check that the base repository is this repository with base `main`, and that the head is your fork and branch.
+3. Click **Create pull request**. Title it "Add YOUR PROJECT NAME" or "Edit YOUR PROJECT NAME", and optionally add details. Leave **Allow edits by maintainers** checked.
 
-Navigate to your copy of the ossi-website repository on GitHub.com. Along the top navigation tabs:
+An automated check then validates your tags. If it finds a problem, it posts a comment on your pull request. Fix the file, then commit and push again. The changes are added to the open pull request, and a success comment appears once the tags are valid.
 
-1.  Select **Pull Requests**.
+The maintainers may ask for changes before approving your pull request. Thank you for contributing!
 
-2.  On the page that opens, click the green **New pull request** button in the upper right corner.
+## Removing the placeholder projects
 
-![GitHub.com interface to view existing and open new pull requests](./public/readme-images/open-pr.png)
-
-A page title **Comparing changes** will open. In the dropdown menus:
-
-3.  Check that your pull request is originating from the correct place (your repo and branch) and going to the correct place (the original Janelia/ossi-website repo) - see the exact settings written out below.
-
-- **Base repository** is set to **JaneliaSciComp/ossi-website**
-- **Base** is set to **main**
-- **Head** repository is set to **YOUR-USERNAME/YOUR-REPO-NAME**
-- **Compare** is set to **main** (unless you opened a specific branch to add/edit your project on)
-
-4.  Then click the green **New pull request** button.
-
-![GitHub.com interface to set the base and head of a pull request](./public/readme-images/open-pr-2.png)
-
-The **Open pull request** page will open.
-
-5. Add a title in the format of "Add YOUR PROJECT NAME" or "Edit YOUR PROJECT NAME", if needed. If you only made one commit, the **Add a title** text box should autopopulate as from your commit message. Optionally, you can add specific requests or explanations to the **Add a description** text box.
-
-6. Click the green **Create pull request** button to submit your pull request. **Note**: leave the option **Allow edits by maintainers** checked. This will allow the website maintainers to help edit your project file before completing the pull request, if needed.
-![GitHub.com interface to set the title, description, and other details about a pull request. Also includes the button to submit the pull request](./public/readme-images/open-pr-3.png)
-</details>
-
-After you submit your pull request, an automated check will run to ensure your tag categories and options are valid.
-
-<details>
-  <summary>If the check fails, a comment will publish to your pull request, indicating where the problem is.</summary>
-  
-![Comment on a GitHub pull request indicating that the project file has invalid tags](./public/readme-images/tag-validation-fail.png)
-
-To fix the error, return to your code editor and make the required changes to the file. Then follow the instructions to [commit and push your changes](#preview-your-project-page-and-push-your-changes-to-github). These changes will be added to the open pull request. Once there are no tag validation errors, a success comment will post to your pull request.
-
-![Comment on a GitHub pull request indicating the modified project files have valid tags](./public/readme-images/tag-validation-success.png)
-
-</details>
-
-Your PR will be reviewed by the maintainers of the OSSI site. You may receive requests for changes before your PR is approved.
-
-### Thank you for your contribution!
+The three `src/content/projects/placeholder-*.md` files are examples used during development, with illustrative tags. Delete them once real projects have been added.
