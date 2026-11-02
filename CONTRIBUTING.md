@@ -73,6 +73,7 @@ Follow the examples in `_project-template.md`.
 | `tagline` | Required | One or two sentences describing the project. |
 | `maintainer` | Required | The one person responsible for this page. Used internally and not shown on the site. |
 | `repository link` | Required | Where the project is hosted. See [Where your project is hosted](#where-your-project-is-hosted). |
+| `update_date` | Do not set for GitHub or Figshare projects | Filled in automatically every week from the repository's last push (GitHub) or last modified date (Figshare), and used for the "Last updated" sort. For projects hosted elsewhere you may add it yourself as `YYYY-MM-DD`; without it the project is listed last when sorting by date. |
 | `documentation link` | Optional | Link to documentation, if separate from the repository link. |
 | `preferred contact method` | Optional | A link or `mailto:` address for the "Reach out with a question" button. |
 | `how to cite text` | Optional | A citation. Overrides the citation supplied by the repository (see below). Wrap in quotes. |
@@ -104,6 +105,8 @@ Notes:
 - Text you write in the body of your project file always replaces the fetched README or description.
 
 ## Tags
+
+Visitors can also sort the cards alphabetically or by last update, newest or oldest first.
 
 Tags let visitors filter projects. The tag fields are `file types`, `license`, `hardware type`, `development team`, `CAD/EDA` and `use case`.
 

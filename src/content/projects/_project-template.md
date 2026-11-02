@@ -3,6 +3,7 @@ title: Required. Your project title.
 tagline: "Required. 1-2 sentences that describe your project. An aside: if you use a colon in a field value, you must wrap the entire phrase in quotes. Otherwise, quotes are not required."
 maintainer: Required. Name of the person responsible for maintaining this project page. For internal use/reference - not posted to the website.
 repository link: "Required. Where the project is hosted - a GitHub repository or a Figshare record (use the clean article URL, without any ?file=... part). For GitHub and Figshare links, the README or description is fetched when the site is built. Any other link (for example a Janelia.org page or Flintbox) is also fine; in that case, write the page content in the body of this file."
+#update_date - Do not set this for GitHub or Figshare projects: it is filled in automatically by a scheduled GitHub Action and powers the "Last updated" sort. For projects hosted elsewhere you may add it yourself, in the format YYYY-MM-DD; without it the project is listed last when sorting by date.
 #documentation link - Optional. Delete this line if the repository link already serves as the documentation.
 documentation link: https://optional-link-to-documentation.com
 preferred contact method: "Creates the link for the 'Reach out with a question' button on the project page. Encouraged if there is a preferred way for users to reach out for help other than creating an issue in the project's GitHub repo. Example: an email in the format of mailto:email@example.com."

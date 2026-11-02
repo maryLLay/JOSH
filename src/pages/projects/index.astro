@@ -10,6 +10,7 @@ import CardImage from "@components/projects/CardImage";
 import FilterMenu from "@components/projects/FilterMenu";
 import ProjectCount from "@components/projects/ProjectCount";
 import SearchInput from "@components/projects/SearchInput";
+import SortMenu from "@components/projects/SortMenu";
 import Tag from "@components/projects/Tag.astro";
 import ViewToggle from "@components/ViewToggle.astro";
 import ToggleFilterMenuBtn from "@components/projects/ToggleFilterMenuBtn";
@@ -23,6 +24,28 @@ const allProjects = await getCollection("projects");
 // uniqueTags is an object where keys = unique tag categories, values = unique tags within a category, both across allProjects. All lowercase.
 // used to populate the filter menu
 const uniqueTags = getTagKeysAndValues(allProjects);
+
+// Project ids in each sort order. CardContainer uses a project's position in
+// the selected list as its CSS "order" within the card grid.
+const idsAlphabetical = [...allProjects]
+  .sort((a, b) => a.data.title.localeCompare(b.data.title))
+  .map((project) => project.id);
+
+// update_date is filled in automatically (see .github/actions/update-project-dates.js).
+// Projects with no known update_date go last, whichever direction is chosen.
+const undatedIds = allProjects
+  .filter((project) => !project.data.update_date)
+  .map((project) => project.id);
+const idsByUpdateDateAsc = allProjects
+  .filter((project) => project.data.update_date)
+  .sort((a, b) => a.data.update_date - b.data.update_date)
+  .map((project) => project.id);
+
+const sortedIdsMap = {
+  alphabetical: idsAlphabetical,
+  "updated-newest": [...idsByUpdateDateAsc].reverse().concat(undatedIds),
+  "updated-oldest": [...idsByUpdateDateAsc, ...undatedIds],
+};
 ---
 
 <BaseLayout pageTitle={pageTitle}>
@@ -52,8 +75,12 @@ const uniqueTags = getTagKeysAndValues(allProjects);
   >
     <div class="col-start-1 col-span-1">
       <SearchInput client:load />
-      <ToggleFilterMenuBtn client:only="react" />
       <FilterMenu uniqueTags={uniqueTags} client:only="react" />
+      <!-- small screens: filter button + sort select share a row; md+: unwrapped -->
+      <div class="flex items-center gap-4 md:contents">
+        <ToggleFilterMenuBtn client:only="react" />
+        <SortMenu client:only="react" />
+      </div>
     </div>
     <div class="col-start-2 col-span-2 3xl:col-span-3 4xl:col-span-4">
       <ProjectCount
@@ -62,11 +89,16 @@ const uniqueTags = getTagKeysAndValues(allProjects);
         client:only="react"
       />
       <div
-        class="lg:grid grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 auto-rows-max gap-4"
+        class="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 auto-rows-max gap-4"
       >
         {
           allProjects.map((content) => {
             const tagsObj = getTagKeysAndValues(content);
+            const sortOrder = {
+              alphabetical: sortedIdsMap.alphabetical.indexOf(content.id),
+              "updated-newest": sortedIdsMap["updated-newest"].indexOf(content.id),
+              "updated-oldest": sortedIdsMap["updated-oldest"].indexOf(content.id),
+            };
             return (
               <CardContainer
                 key={content.id}
@@ -75,6 +107,7 @@ const uniqueTags = getTagKeysAndValues(allProjects);
                 tagsObj={tagsObj}
                 contentType="projects"
                 maxLength={allProjects.length}
+                sortOrder={sortOrder}
                 client:only="react"
               >
                 {content.data["image file"] ? (

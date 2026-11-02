@@ -14,6 +14,8 @@ const projectsCollection = defineCollection({
     maintainer: z.string(),
     // Where the project is hosted. GitHub and Figshare links are fetched at build time.
     "repository link": z.string(),
+    // Filled in automatically for GitHub and Figshare links; powers the "last updated" sort
+    update_date: z.coerce.date().optional(),
     "documentation link": z.string().optional(),
     "how to cite text": z.string().nullish(),
     "how to cite link": z.string().nullish(),

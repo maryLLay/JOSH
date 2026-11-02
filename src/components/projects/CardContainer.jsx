@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { selectedTags } from "@stores/selectedTagsStore";
+import { selectedSort } from "@stores/selectedSortStore";
 import { getTagValues } from "@utils/getTags";
 import { $projectData } from "@stores/projectSearchResultsStore";
 import { $urlQuery } from "@stores/queryStore";
@@ -14,12 +15,14 @@ export default function CardContainer({
   cardContent,
   contentType,
   maxLength,
+  sortOrder,
 }) {
   const [visible, setVisible] = useState("relative");
   const [order, setOrder] = useState(0);
   const urlQuery = useStore($urlQuery);
   const projectData = useStore($projectData);
   const $selectedTags = useStore(selectedTags);
+  const $selectedSort = useStore(selectedSort);
   const tagsArray = getTagValues(tagsObj);
 
   let contentData = null;
@@ -39,13 +42,19 @@ export default function CardContainer({
     return index;
   }
 
-  //set card order in the grid/flexbox (random if no search query; otherwise based on Fuse score) and
-  //determine whether card is visible or not based on: search query, tag selections
+  //set card order in the grid (search results: Fuse score; otherwise the selected sort option;
+  //otherwise random) and determine whether card is visible or not based on: search query, tag selections
   useEffect(() => {
     if (typeof window !== "undefined") {
       const matchingIndex = findMatchingIndex(contentData, title);
-      const itemOrder =
-        urlQuery === "" ? Math.floor(Math.random() * maxLength) : matchingIndex;
+      let itemOrder;
+      if (urlQuery !== "") {
+        itemOrder = matchingIndex;
+      } else if (sortOrder && Number.isInteger(sortOrder[$selectedSort])) {
+        itemOrder = sortOrder[$selectedSort];
+      } else {
+        itemOrder = Math.floor(Math.random() * maxLength);
+      }
       setOrder(itemOrder);
 
       const isSearchMatch =
@@ -67,8 +76,9 @@ export default function CardContainer({
     $urlQuery,
     contentData,
     $selectedTags,
+    $selectedSort,
     contentType,
-    ]);
+  ]);
 
   return (
     <div
