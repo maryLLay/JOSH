@@ -1,13 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Track proposal PDF views
-  document.querySelectorAll(".proposal-download").forEach((item) => {
-    item.addEventListener("click", (event) => {
-      if (window.fathom) {
-        fathom.trackEvent(`View proposal PDF`);
-      }
-    });
-  });
-
   // Track in-page GitHub README views
   document.querySelectorAll(".readme-tab").forEach((item) => {
     item.addEventListener("click", (event) => {

@@ -1,9 +1,13 @@
 import yaml from "yaml";
 import { readFileSync, writeFileSync } from "fs";
-import validTagsList from "./validTagsList.json" assert { type: "json" };
+import validTagsList from "./validTagsList.json" with { type: "json" };
 
 const changedFiles = process.env.CHANGED_FILES.split(" ");
 console.log("changed files: ", changedFiles);
+// GITHUB_REPOSITORY is set automatically when this runs in GitHub Actions
+const validTagsListUrl = process.env.GITHUB_REPOSITORY
+  ? `https://github.com/${process.env.GITHUB_REPOSITORY}/blob/main/.github/actions/validTagsList.json`
+  : ".github/actions/validTagsList.json";
 let invalidFrontmatterFiles = {};
 let invalidTagsFiles = {};
 
@@ -79,7 +83,7 @@ if (Object.keys(invalidFrontmatterFiles).length > 0) {
 }
 
 if (Object.keys(invalidTagsFiles).length > 0) {
-  reportContent += `## :triangular_flag_on_post: Potential issue - invalid tags\n\n**One or more of your committed Markdown files might have invalid tag values.** The below files contain tags that do not match the options [here](https://github.com/JaneliaSciComp/ossi-website/tree/main/.github/actions/validTagsList.json).\n`;
+  reportContent += `## :triangular_flag_on_post: Potential issue - invalid tags\n\n**One or more of your committed Markdown files might have invalid tag values.** The below files contain tags that do not match the options [here](${validTagsListUrl}).\n`;
   for (const [file, tags] of Object.entries(invalidTagsFiles)) {
     reportContent += `\n**${file}:**\n`;
     for (const tag of tags) {

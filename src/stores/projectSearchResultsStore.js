@@ -1,3 +1,4 @@
+import { withBase } from "@utils/withBase";
 // Logger only necessary if you want to track the stores in devtools
 // import { logger } from "@nanostores/logger";
 
@@ -18,22 +19,19 @@ const projectsOptions = {
     "title",
     "tagline",
     "how to cite text",
-    "related blog posts",
     "development team",
-    "programming language",
-    "open source license",
-    "software type",
+    "file types",
+    "license",
+    "hardware type",
+    "CAD/EDA",
     "use case",
-    "usage environment",
-    "software ecosystem",
-    "supported file types",
     "body",
   ],
 };
 
 onMount($projectsFuse, async () => {
   try {
-    const response = await fetch(`/projects.json`);
+    const response = await fetch(withBase("/projects.json"));
     const { projects, index } = await response.json();
     const parsedIndex = Fuse.parseIndex(index);
     const newFuseInstance = new Fuse(projects, projectsOptions, parsedIndex);

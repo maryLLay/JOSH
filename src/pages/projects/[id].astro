@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntries, render } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import QuickLinks from "@components/individual-project/QuickLinks.astro";
@@ -9,11 +9,12 @@ import ProjectPageTabs from "@components/individual-project/Tabs";
 import License from "@components/individual-project/License.astro";
 import ExternalLinks from "@components/individual-project/ExternalLinks.astro";
 import Tag from "@components/projects/Tag.astro";
-import Readme from "@components/individual-project/Readme";
+import RepoInfo from "@components/individual-project/RepoInfo.astro";
 
+import { withBase } from "@utils/withBase";
+import { fetchRepoInfo } from "@utils/fetchRepoInfo";
 import { getTagKeysAndValues } from "@utils/getTags";
 import { findLabInfo } from "@utils/getLabUrl";
-import RelatedPosts from "@components/individual-project/RelatedPosts.astro";
 
 // Implementation of Astro getStaticPaths() function, required for dynamic routes
 // Defines all paths at build time, in this case, for individual projects in the "projects" content collection
@@ -30,14 +31,28 @@ const frontmatter = project.data;
 const body = project.body;
 const { Content } = await render(project);
 
-const relatedBlogPosts = frontmatter["related blog posts"]
-  ? await getEntries(frontmatter["related blog posts"])
-  : null;
-
 //Have to set data: frontmatter b/c the function expects an obj in the format {data: {key: value}}
 //And frontmatter = data
 const tagsObj = getTagKeysAndValues({ data: frontmatter });
 const labInfoArray = findLabInfo(frontmatter["development team"]);
+
+// Display-only data fetched at build time from the repository link (GitHub or Figshare).
+// repoInfo is null for other hosts or if the request fails.
+const repoInfo = await fetchRepoInfo(frontmatter["repository link"]);
+
+// What fills the second tab. Priority: markdown body written in the project file,
+// then the GitHub README, then the Figshare description.
+// A body that still contains the template's instruction text counts as empty.
+const hasBody =
+  body !== undefined &&
+  body.trim() !== "" &&
+  !body.includes("provide an alternative description");
+const fetchedHtml = repoInfo?.readmeHtml ?? repoInfo?.descriptionHtml ?? null;
+const contentLabel = hasBody
+  ? "Details"
+  : repoInfo?.host === "github"
+  ? "README"
+  : "Description";
 ---
 
 <BaseLayout>
@@ -46,7 +61,7 @@ const labInfoArray = findLabInfo(frontmatter["development team"]);
   >
     <a
       class="col-start-1 row-start-1 mx-6 text-sm text-primary hover:underline dark:text-slate-300 dark:border-slate-500 dark:hover:border-slate-800 cursor-pointer"
-      href={`/projects`}
+      href={withBase("/projects")}
     >
       Projects
     </a>
@@ -66,19 +81,19 @@ const labInfoArray = findLabInfo(frontmatter["development team"]);
     <div
       class="col-start-4 col-span-2 row-start-2 row-span-2 px-6 py-12 lg:p-0 lg:pl-12 bg-primary bg-opacity-20 lg:bg-page lg:bg-opacity-0"
     >
-      <QuickLinks frontmatter={frontmatter} />
+      <QuickLinks frontmatter={frontmatter} repoInfo={repoInfo} />
     </div>
     <div class="col-start-1 col-span-3 mx-6">
       <Youtube
         url={frontmatter["youtube url"]}
-        title={frontmatter["youtube title"]}
+        title={frontmatter["youtube caption"]}
         params={frontmatter["youtube params"]}
       />
-      <ProjectPageTabs client:load>
+      <ProjectPageTabs client:load contentLabel={contentLabel}>
         <div slot="overview">
+          <RepoInfo repoInfo={repoInfo} />
           <DevelopmentTeam team={labInfoArray} />
-          <License license={frontmatter["open source license"]} />
-          <RelatedPosts posts={relatedBlogPosts} />
+          <License license={frontmatter.license} />
           <ExternalLinks frontmatter={frontmatter} />
           <div class="pt-6 flex flex-wrap gap-2">
             {
@@ -93,18 +108,11 @@ const labInfoArray = findLabInfo(frontmatter["development team"]);
           </div>
         </div>
 
-        {
-          body === undefined ||
-          body.includes("provide an alternative description") ? (
-            <Readme
-              githubLink={frontmatter["github link"]}
-              slot="readme"
-              client:load
-            />
-          ) : (
-            <Content slot="content" />
-          )
-        }
+        {hasBody ? (
+          <Content slot="content" />
+        ) : fetchedHtml ? (
+          <div slot="content" set:html={fetchedHtml} />
+        ) : null}
       </ProjectPageTabs>
     </div>
   </div>

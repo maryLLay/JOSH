@@ -5,15 +5,12 @@ const { team } = Astro.props;
 ---
 
 {
-  team ? (
+  team && team.length ? (
     <div class="flex items-center flex-wrap mb-2 gap-3">
       <p class="font-semibold">Development Team:</p>
-      {team.map((entry) => {
-        if (entry) {
-          const { name, url } = entry;
-          return <Link url={url} text={name} />;
-        }
-      })}
+      {team.map(({ name, url }) =>
+        url ? <Link url={url} text={name} /> : <span>{name}</span>
+      )}
     </div>
   ) : null
 }

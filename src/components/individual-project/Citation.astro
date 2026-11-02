@@ -1,14 +1,24 @@
 ---
 import Link from "@components/Link.astro";
-const { citationLink, citationText, githubLink } = Astro.props;
+const { citationLink, citationText, repoInfo, repositoryLink, hostLabel } =
+  Astro.props;
+const doiUrl = repoInfo?.doi ? `https://doi.org/${repoInfo.doi}` : null;
 ---
 
 {
+  // 1. A citation written in the project's frontmatter always wins
   citationLink && citationText ? (
     <Link url={citationLink} text={citationText} />
   ) : citationText ? (
     <p>{citationText}</p>
+  ) : repoInfo?.citation ? (
+    // 2. Otherwise use the citation supplied by the repository record (e.g. Figshare)
+    <div class="flex flex-col gap-1">
+      <p>{repoInfo.citation}</p>
+      {doiUrl ? <Link url={doiUrl} text="Cite this DOI" /> : null}
+    </div>
   ) : (
-    <Link url={githubLink} text={"Cite the GitHub repository"} />
+    // 3. Otherwise point at the repository itself
+    <Link url={repositoryLink} text={`Cite the ${hostLabel} page`} />
   )
 }

@@ -1,6 +1,7 @@
 ---
 import { headerData } from "@data/navigation";
 import { siteConfig } from "../siteConfig";
+import { withBase } from "@utils/withBase";
 import ToggleTheme from "@components/ToggleTheme.astro";
 ---
 
@@ -12,7 +13,7 @@ import ToggleTheme from "@components/ToggleTheme.astro";
   <div class="absolute inset-0 bg-white dark:bg-dark"></div>
 
   <div class="relative text-default p-3 md:px-6 w-full flex justify-between">
-    <a class="flex items-center" href="/">
+    <a class="flex items-center" href={withBase("/projects")}>
       <span
         class="self-center ml-2 rtl:ml-0 rtl:mr-2 text-2xl font-bold text-gray-900 whitespace-nowrap dark:text-white"
       >
@@ -71,7 +72,7 @@ import ToggleTheme from "@components/ToggleTheme.astro";
                 {links?.length ? (
                   <>
                     <button class="hover:text-link dark:hover:text-white px-4 py-3 flex items-center">
-                      <a href={href}>{text}</a>
+                      <a href={withBase(href)}>{text}</a>
                     </button>
                     <ul class="dropdown-menu md:backdrop-blur-md dark:md:bg-dark rounded md:absolute pl-4 md:pl-0 md:hidden font-medium md:bg-white/90 md:min-w-[200px] drop-shadow-xl">
                       {links.map(({ text: text2, href: href2 }) => (
@@ -93,7 +94,7 @@ import ToggleTheme from "@components/ToggleTheme.astro";
                     class:list={[
                       "hover:text-link dark:hover:text-white px-4 py-3 flex items-centers",
                     ]}
-                    href={href}
+                    href={/^https?:/.test(href) ? href : withBase(href)}
                   >
                     {text}
                   </a>

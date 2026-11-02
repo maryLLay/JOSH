@@ -1,17 +1,17 @@
 import { allLabNamesAndUrls } from "@data/labNamesUrls";
 
-//Used to take the "associated labs and projects" tag and find the associated URL
+// Takes the "development team" tag value(s) and returns [{ name, url }],
+// where url is null if no link has been configured for that team.
 export function findLabInfo(labNames) {
+  if (!labNames) {
+    return [];
+  }
   if (!Array.isArray(labNames)) {
     labNames = [labNames];
   }
 
-  const labInfoArray = labNames.map((labName) => {
-    const labData = allLabNamesAndUrls.find((entry) =>
-      entry[0].includes(labName)
-    );
-    return labData ? { name: labName, url: labData[1] } : null;
+  return labNames.map((labName) => {
+    const labData = allLabNamesAndUrls.find((entry) => entry[0] === labName);
+    return { name: labName, url: labData ? labData[1] : null };
   });
-
-  return labInfoArray;
 }

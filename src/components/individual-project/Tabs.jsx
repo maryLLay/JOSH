@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@components/ui/tabs";
 
-export default function ProjectPageTabs({ overview, readme, content }) {
-  const contentTabTitle = readme ? "GitHub README" : "Details";
+export default function ProjectPageTabs({ overview, content, contentLabel }) {
+  const contentTabTitle = contentLabel ?? "Details";
   return (
     <Tabs className="min-h-[325px] pt-6 lg:pt-0" defaultValue="overview">
       <TabsList className="p-0 rounded-none flex font-sans justify-around content-between w-full">
@@ -20,6 +20,7 @@ export default function ProjectPageTabs({ overview, readme, content }) {
         >
           Overview
         </TabsTrigger>
+        {content ? (
         <TabsTrigger
           value="details"
           className="readme-tab text-md py-4 rounded-t-lg w-full bg-slate-100 dark:bg-slate-700
@@ -35,17 +36,19 @@ export default function ProjectPageTabs({ overview, readme, content }) {
         >
           {contentTabTitle}
         </TabsTrigger>
+        ) : null}
       </TabsList>
       <TabsContent value="overview" className="min-w-full min-h-full pt-6 ">
         {overview}
       </TabsContent>
+      {content ? (
       <TabsContent
         value="details"
         className="min-w-full min-h-full pt-6 prose prose-sm lg:prose-md dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg"
       >
-        {readme}
         {content}
       </TabsContent>
+      ) : null}
     </Tabs>
   );
 }

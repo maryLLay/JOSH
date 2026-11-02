@@ -1,11 +1,14 @@
 ---
 import { getBackgroundColor } from "@utils/getTagBgColor";
 import { updateSearchParamUrl } from "@utils/updateTagUrlParams";
+import { withBase } from "@utils/withBase";
 
 const { tagCat, tag, contentType } = Astro.props;
 
-const contentUrl = new URL(`../${contentType}`, Astro.url.origin);
-const updatedUrl = updateSearchParamUrl(contentUrl.href, tag);
+const contentUrl = new URL(withBase(`/${contentType}`), Astro.url.origin);
+// Relative link, so it works on any domain or base path
+const fullUrl = new URL(updateSearchParamUrl(contentUrl.href, tag));
+const updatedUrl = `${fullUrl.pathname}${fullUrl.search}`;
 
 const backgroundColor = getBackgroundColor(tagCat);
 const style = { backgroundColor: backgroundColor };

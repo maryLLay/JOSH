@@ -8,7 +8,8 @@ import {
 import { selectedTags, handleTagSelection } from "@stores/selectedTagsStore.js";
 import { getBackgroundColor } from "@utils/getTagBgColor";
 
-const OMIT_TAG_CATEGORIES = ["software ecosystem", "supported file types"];
+// Tag categories listed here are not shown in the filter menu
+const OMIT_TAG_CATEGORIES = [];
 
 export default function FilterMenu({ uniqueTags }) {
   const $selectedTags = useStore(selectedTags);

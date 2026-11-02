@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getRandomImage } from "@utils/getRandomImage";
 import heroImageFiles from "@data/heroImageFiles.json";
+import { withBase } from "@utils/withBase";
 import { twMerge } from "tailwind-merge";
 
 export default function Hero({
@@ -24,7 +25,7 @@ export default function Hero({
     backgroundImage:
       backgroundImg === ""
         ? "none"
-        : `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/hero-images/${backgroundImg.file}')`,
+        : `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${withBase(`/hero-images/${backgroundImg.file}`)}')`,
     backgroundColor: backgroundImg === "" ? "#000" : "transparent",
   };
 

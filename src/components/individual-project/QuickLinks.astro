@@ -1,15 +1,28 @@
 ---
 import Citation from "./Citation.astro";
 import { Icon } from "astro-icon/components";
-const { frontmatter } = Astro.props;
+import { getRepoHost, getHostLabel } from "@utils/fetchRepoInfo";
+const { frontmatter, repoInfo } = Astro.props;
 
+const repositoryLink = frontmatter["repository link"];
+const hostLabel = getHostLabel(repositoryLink);
+
+// Where the project files live, if that differs from the repository link
+// (e.g. a Figshare record whose file entry points at a GitHub repo)
+const projectFilesLink =
+  repoInfo?.projectFilesUrl && repoInfo.projectFilesUrl !== repositoryLink
+    ? repoInfo.projectFilesUrl
+    : null;
+
+// Issues only exist on GitHub, so only offer this link for GitHub repositories
+const githubRepoLink = [repositoryLink, projectFilesLink].find(
+  (link) => getRepoHost(link) === "github"
+);
 let githubIssueLink = "";
 try {
-  const githubIssueUrl_obj = new URL(
-    `${frontmatter["github link"]}/issues`,
-    frontmatter["github link"]
-  );
-  githubIssueLink = githubIssueUrl_obj.href;
+  githubIssueLink = githubRepoLink
+    ? new URL(`${githubRepoLink.replace(/\/$/, "")}/issues`).href
+    : "";
 } catch {
   githubIssueLink = "";
 }
@@ -21,16 +34,31 @@ try {
     <div class="flex flex-col gap-1 mr-8">
       <h3 class="font-bold mb-1">Get started</h3>
       {
-        frontmatter["github link"] ? (
+        repositoryLink ? (
           <a
             class="self-start flex items-center gap-1 transition ease-in duration-200 hover:text-primary dark:text-slate-300 dark:hover:text-accent cursor-pointer"
-            href={frontmatter["github link"]}
+            href={repositoryLink}
           >
             <Icon
               name="tabler:square-chevron-right"
               class="w-5 h-5  inline-block"
             />
-            Source code
+            {`View on ${hostLabel}`}
+          </a>
+        ) : null
+      }
+
+      {
+        projectFilesLink ? (
+          <a
+            class="self-start flex items-center gap-1 transition ease-in duration-200 hover:text-primary dark:text-slate-300 dark:hover:text-accent cursor-pointer"
+            href={projectFilesLink}
+          >
+            <Icon
+              name="tabler:square-chevron-right"
+              class="w-5 h-5  inline-block"
+            />
+            {`Project files on ${getHostLabel(projectFilesLink)}`}
           </a>
         ) : null
       }
@@ -46,21 +74,6 @@ try {
               class="w-5 h-5  inline-block"
             />
             Documentation
-          </a>
-        ) : null
-      }
-
-      {
-        frontmatter["installation instructions link"] ? (
-          <a
-            class="self-start flex items-center gap-1 transition ease-in duration-200 hover:text-primary dark:text-slate-300 dark:hover:text-accent cursor-pointer"
-            href={frontmatter["installation instructions link"]}
-          >
-            <Icon
-              name="tabler:square-chevron-right"
-              class="w-5 h-5  inline-block"
-            />
-            How to install
           </a>
         ) : null
       }
@@ -89,7 +102,7 @@ try {
       }
     </div>
     <div class="flex flex-col gap-1">
-      <h3 class="font-bold mb-1">Cite this software</h3>
+      <h3 class="font-bold mb-1">Cite this project</h3>
       <Citation
         citationText={frontmatter["how to cite text"]
           ? frontmatter["how to cite text"]
@@ -97,7 +110,9 @@ try {
         citationLink={frontmatter["how to cite link"]
           ? frontmatter["how to cite link"]
           : null}
-        githubLink={frontmatter["github link"]}
+        repoInfo={repoInfo}
+        repositoryLink={repositoryLink}
+        hostLabel={hostLabel}
       />
     </div>
   </div>

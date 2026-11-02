@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { selectedTags } from "@stores/selectedTagsStore";
-import { selectedProjectType } from "@stores/selectedProjectTypeStore";
 import { getTagValues } from "@utils/getTags";
 import { $projectData } from "@stores/projectSearchResultsStore";
-import { $ecosystemData } from "@stores/ecosystemSearchResultsStore";
 import { $urlQuery } from "@stores/queryStore";
 
 export default function CardContainer({
   url,
   title,
   tagsObj,
-  projectType,
   tags,
   cardImage,
   cardContent,
@@ -22,19 +19,13 @@ export default function CardContainer({
   const [order, setOrder] = useState(0);
   const urlQuery = useStore($urlQuery);
   const projectData = useStore($projectData);
-  const ecosystemData = useStore($ecosystemData);
   const $selectedTags = useStore(selectedTags);
-  const $selectedProjectType = useStore(selectedProjectType);
   const tagsArray = getTagValues(tagsObj);
 
   let contentData = null;
   if (contentType === "projects") {
     if (projectData) {
       contentData = projectData;
-    }
-  } else if (contentType === "ecosystems") {
-    if (ecosystemData) {
-      contentData = ecosystemData;
     }
   }
 
@@ -49,7 +40,7 @@ export default function CardContainer({
   }
 
   //set card order in the grid/flexbox (random if no search query; otherwise based on Fuse score) and
-  //determine whether card is visible or not based on: search query, tag selections, project type selections
+  //determine whether card is visible or not based on: search query, tag selections
   useEffect(() => {
     if (typeof window !== "undefined") {
       const matchingIndex = findMatchingIndex(contentData, title);
@@ -65,14 +56,8 @@ export default function CardContainer({
       const hasMatchingTags =
         $selectedTags.length === 0 ||
         tagsArray.some((tag) => $selectedTags.includes(tag));
-      const matchesProjectType =
-        $selectedProjectType.length === 0 ||
-        contentType === "ecosystems" ||
-        $selectedProjectType.includes(projectType) ||
-        $selectedProjectType === null;
-
       const newVisibility =
-        isSearchMatch && hasMatchingTags && matchesProjectType
+        isSearchMatch && hasMatchingTags
           ? "relative"
           : "hidden";
 
@@ -81,11 +66,9 @@ export default function CardContainer({
   }, [
     $urlQuery,
     contentData,
-    $selectedProjectType,
     $selectedTags,
     contentType,
-    projectType,
-  ]);
+    ]);
 
   return (
     <div
@@ -95,16 +78,6 @@ export default function CardContainer({
       <a href={url} className="absolute top-0 left-0 bottom-0 right-0"></a>
       <div className="w-full h-40">
         {cardImage}
-        {projectType === "OSSI - current" && (
-          <span className="absolute top-0 right-0 bg-secondary text-white px-2 py-1 text-sm rounded-bl-md">
-            {projectType}
-          </span>
-        )}
-        {projectType === "OSSI - previous" && (
-          <span className="absolute top-0 right-0 bg-primary text-white px-2 py-1 text-sm rounded-bl-md">
-            {projectType}
-          </span>
-        )}
       </div>
       {cardContent}
       <div className="relative flex flex-wrap gap-2 px-4 py-2 pointer-events-none z-10">

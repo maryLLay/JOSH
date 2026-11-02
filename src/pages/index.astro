@@ -4,13 +4,14 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Hero from "@components/Hero";
 import CallToAction from "@components/CallToAction.astro";
 import Wrapper from "@components/Wrapper.astro";
+import { withBase } from "@utils/withBase";
 ---
 
 <BaseLayout>
   <Hero
     client:load
     title={siteConfig.name}
-    subtitle="Making scientific software user-friendly and developer-friendly"
+    subtitle="Open source hardware designed at Janelia Research Campus"
     heightClasses="h-[calc(100vh-60px)] sm:h-[calc(100vh-88px)] min-h-[588px]"
   >
     <Wrapper containerClass="max-w-5xl md:px-6 lg:px-12 xl:px-16">
@@ -20,62 +21,33 @@ import Wrapper from "@components/Wrapper.astro";
           actions={[
             {
               variant: "primary",
-              text: `Explore software projects`,
-              href: `/projects`,
-            },
-            {
-              variant: "",
-              text: "Learn more about the OSSI",
-              href: `/ossi`,
+              text: `Explore hardware projects`,
+              href: withBase("/projects"),
             },
           ]}
         >
           <Fragment slot="content">
-            This website aims to catalogue software projects developed through
-            the <b>Janelia Open Science Software Initiative</b> (OSSI), as well as
-            other software developed by teams at Janelia Research Campus.
+            This website catalogues open source hardware developed by teams at
+            Janelia Research Campus, so that others can find, build and cite
+            their designs.
           </Fragment>
         </CallToAction>
       </div>
     </Wrapper>
   </Hero>
 
-  <!-- <Wrapper containerClass="py-8 md:py-12">
-    <ContentGridDisplay
-      title=`${siteConfig.shortName} Software Blog`
-      information=`The latest updates on ${siteConfig.shortName} software projects`
-      content="blog"
-      linkText="View all posts"
-      linkUrl={`/blog`}
-    />
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-slate-900"></div>
-    </Fragment>
-  </Wrapper> -->
-
   <Wrapper containerClass="py-4 sm:py-8 md:py-12">
     <CallToAction
-      actions={[
-        {
-          variant: "primary",
-          text: "View the GitHub repository",
-          href: "https://github.com/JaneliaSciComp/ossi-website",
-          target: "_blank",
-        },
-      ]}
     >
       <Fragment slot="bg">
         <div class="absolute inset-0 bg-blue-50 dark:bg-slate-900"></div>
       </Fragment>
       <Fragment slot="title"
-        >Janelians: add your software to this website!</Fragment
+        >Janelians: add your hardware to this website!</Fragment
       >
       <Fragment slot="content">
-        We welcome contributions from current and former Janelians. You can add
-        a page about your software project or write a blog post. Any software
-        developed at Janelia (OSSI-funded or not) may be added to this website.
-        Read the documentation on the site's GitHub repository to get started.
+        We welcome contributions from current and former Janelians. Contact
+        laym@janelia.hhmi.org to add a page about your hardware project.
       </Fragment>
     </CallToAction>
   </Wrapper>

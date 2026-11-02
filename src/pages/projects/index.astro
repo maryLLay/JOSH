@@ -9,17 +9,15 @@ import CardContainer from "@components/projects/CardContainer";
 import CardContent from "@components/projects/CardContent.astro";
 import CardImage from "@components/projects/CardImage";
 import FilterMenu from "@components/projects/FilterMenu";
-import ResetProjectTypeBtn from "@components/projects/ResetProjectTypeBtn";
 import ProjectCount from "@components/projects/ProjectCount";
-import ProjectTypeBtns from "@components/projects/ProjectTypeBtns";
-import ProjectTypeDropdown from "@components/projects/ProjectTypeDropdown";
 import SearchInput from "@components/projects/SearchInput";
 import Tag from "@components/projects/Tag.astro";
 import ToggleFilterMenuBtn from "@components/projects/ToggleFilterMenuBtn";
 
+import { withBase } from "@utils/withBase";
 import { getTagKeysAndValues } from "@utils/getTags";
 
-const pageTitle = "OSSI-supported projects";
+const pageTitle = "Projects";
 const allProjects = await getCollection("projects");
 
 // uniqueTags is an object where keys = unique tag categories, values = unique tags within a category, both across allProjects. All lowercase.
@@ -30,8 +28,8 @@ const uniqueTags = getTagKeysAndValues(allProjects);
 <BaseLayout pageTitle={pageTitle}>
   <Hero
     client:load
-    title=`${siteConfig.shortName} Software Projects`
-    subtitle=`${siteConfig.name} (${siteConfig.acronymOnly}) supported software projects and other software developed at Janelia`
+    title=`${siteConfig.shortName} Projects`
+    subtitle=`Open source hardware projects developed at Janelia Research Campus`
     heightClasses="h-96"
     paddingClasses="md:px-6 lg:px-20 xl:px-32 lg:mx-0 max-w-7xl"
     captionAlignment="lg:left-20 xl:left-32"
@@ -45,14 +43,6 @@ const uniqueTags = getTagKeysAndValues(allProjects);
       <FilterMenu uniqueTags={uniqueTags} client:only="react" />
     </div>
     <div class="col-start-2 col-span-2 3xl:col-span-3 4xl:col-span-4">
-      <ProjectTypeBtns client:only="react" />
-      <div class="md:hidden flex flex-col gap-6 items-end min-w-full">
-        <div class="flex gap-2 w-full">
-          <h3 class="font-bold">Filter by OSSI funding status</h3>
-          <ResetProjectTypeBtn client:load />
-          <ProjectTypeDropdown client:visible />
-        </div>
-      </div>
       <ProjectCount
         allContent={allProjects}
         contentType="projects"
@@ -67,17 +57,16 @@ const uniqueTags = getTagKeysAndValues(allProjects);
             return (
               <CardContainer
                 key={content.id}
-                url={`/projects/${content.id}/`}
+                url={withBase(`/projects/${content.id}/`)}
                 title={content.data.title}
                 tagsObj={tagsObj}
-                projectType={content.data["project type"][0]}
                 contentType="projects"
                 maxLength={allProjects.length}
                 client:only="react"
               >
                 {content.data["image file"] ? (
                   <img
-                    src={`/project-images/${content.data["image file"]}`}
+                    src={withBase(`/project-images/${content.data["image file"]}`)}
                     class="w-full h-40 object-cover object-center bg-white"
                     loading="lazy"
                     slot="cardImage"
@@ -88,7 +77,6 @@ const uniqueTags = getTagKeysAndValues(allProjects);
 
                 <CardContent
                   title={content.data.title}
-                  authors={content.data["author names"]}
                   tagline={content.data.tagline}
                   tagsObj={tagsObj}
                   slot="cardContent"
