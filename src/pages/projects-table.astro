@@ -1,0 +1,188 @@
+---
+import { siteConfig } from "../siteConfig";
+import { getCollection } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ViewToggle from "@components/ViewToggle.astro";
+import { getHostLabel } from "@utils/fetchRepoInfo";
+import { withBase } from "@utils/withBase";
+
+const allProjects = (await getCollection("projects")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
+
+// Tag fields can be a string, a list, or missing
+const asList = (value) => (Array.isArray(value) ? value : value ? [value] : []);
+
+const tagColumns = [
+  { key: "hardware type", label: "Hardware type" },
+  { key: "license", label: "License" },
+  { key: "file types", label: "File types" },
+  { key: "CAD/EDA", label: "CAD/EDA" },
+  { key: "development team", label: "Development team" },
+  { key: "use case", label: "Use case" },
+];
+const columnLabels = [
+  "Title",
+  "Tagline",
+  ...tagColumns.map((c) => c.label),
+  "Hosted on",
+];
+---
+
+<BaseLayout>
+  <main class="grow pt-28 lg:pt-32 pb-12 px-4 sm:px-6 lg:px-12 w-full">
+    <h1
+      class="text-3xl sm:text-4xl font-bold leading-tighter tracking-tighter font-heading print:text-2xl"
+    >
+      {siteConfig.shortName} projects: table view
+    </h1>
+    <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 print:hidden">
+      <ViewToggle current="table" />
+      <a class="underline hover:text-primary" href={withBase("/about")}
+        >About JOSH</a
+      >
+    </div>
+
+    <div class="mt-6 flex flex-wrap items-center gap-4 print:hidden">
+      <label class="font-bold" for="table-filter">Filter</label>
+      <input
+        id="table-filter"
+        type="search"
+        placeholder="Type to filter rows"
+        class="rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-1.5 w-full max-w-xs"
+        autocomplete="off"
+      />
+      <p id="table-count" class="text-sm text-muted dark:text-slate-400" aria-live="polite">
+        {allProjects.length} projects
+      </p>
+    </div>
+    <p class="mt-2 text-sm text-muted dark:text-slate-400 print:hidden">
+      Click a column heading to sort. File types marked "(proprietary)" need
+      commercial software to open.
+    </p>
+
+    <div
+      class="mt-4 max-h-[75vh] overflow-auto border border-gray-200 dark:border-slate-800 rounded-md print:max-h-none print:overflow-visible print:border-0"
+    >
+      <table id="projects-table" class="w-full text-sm text-left border-collapse">
+        <thead>
+          <tr>
+            {
+              columnLabels.map((label) => (
+                <th
+                  scope="col"
+                  aria-sort="none"
+                  class="sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 border-b border-gray-300 dark:border-slate-700 p-0 print:static"
+                >
+                  <button
+                    type="button"
+                    class="sort-btn w-full text-left font-semibold px-3 py-2 whitespace-nowrap hover:underline print:no-underline"
+                  >
+                    {label}
+                    <span aria-hidden="true" class="sort-indicator"></span>
+                  </button>
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            allProjects.map((project) => (
+              <tr class="border-b border-gray-200 dark:border-slate-800 align-top odd:bg-white even:bg-slate-50 dark:odd:bg-slate-900 dark:even:bg-slate-950">
+                <td class="px-3 py-2 font-semibold min-w-[12rem]">
+                  <a
+                    class="underline hover:text-primary"
+                    href={withBase(`/projects/${project.id}/`)}
+                  >
+                    {project.data.title}
+                  </a>
+                </td>
+                <td class="px-3 py-2 min-w-[18rem]">{project.data.tagline}</td>
+                {tagColumns.map(({ key }) => (
+                  <td class="px-3 py-2 min-w-[8rem]">
+                    {asList(project.data[key]).map((value, i, list) => (
+                      <>
+                        <span
+                          class:list={[
+                            key === "file types" &&
+                              value.includes("(proprietary)") &&
+                              "font-semibold",
+                          ]}
+                        >
+                          {value}
+                        </span>
+                        {i < list.length - 1 ? ", " : null}
+                      </>
+                    ))}
+                  </td>
+                ))}
+                <td class="px-3 py-2 whitespace-nowrap">
+                  <a
+                    class="underline hover:text-primary"
+                    href={project.data["repository link"]}
+                  >
+                    {getHostLabel(project.data["repository link"])}
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Optional enhancements: the table is complete and readable without this script.
+    const table = document.getElementById("projects-table");
+    const tbody = table.tBodies[0];
+    const headers = Array.from(table.tHead.rows[0].cells);
+    const filterInput = document.getElementById("table-filter");
+    const countEl = document.getElementById("table-count");
+    const total = tbody.rows.length;
+
+    function cellText(row, index) {
+      return row.cells[index].textContent.trim();
+    }
+
+    function sortBy(index, direction) {
+      const rows = Array.from(tbody.rows);
+      rows.sort(
+        (a, b) =>
+          direction *
+          cellText(a, index).localeCompare(cellText(b, index), undefined, {
+            numeric: true,
+            sensitivity: "base",
+          })
+      );
+      rows.forEach((row) => tbody.appendChild(row));
+    }
+
+    headers.forEach((th, index) => {
+      th.querySelector(".sort-btn").addEventListener("click", () => {
+        const direction = th.getAttribute("aria-sort") === "ascending" ? -1 : 1;
+        headers.forEach((other) => {
+          other.setAttribute("aria-sort", "none");
+          other.querySelector(".sort-indicator").textContent = "";
+        });
+        th.setAttribute("aria-sort", direction === 1 ? "ascending" : "descending");
+        th.querySelector(".sort-indicator").textContent =
+          direction === 1 ? " ▲" : " ▼";
+        sortBy(index, direction);
+      });
+    });
+
+    filterInput.addEventListener("input", () => {
+      const query = filterInput.value.trim().toLowerCase();
+      let shown = 0;
+      Array.from(tbody.rows).forEach((row) => {
+        const match = row.textContent.toLowerCase().includes(query);
+        row.hidden = !match;
+        if (match) shown++;
+      });
+      countEl.textContent =
+        query === "" ? `${total} projects` : `Showing ${shown} of ${total} projects`;
+    });
+  </script>
+</BaseLayout>

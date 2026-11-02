@@ -1,0 +1,59 @@
+---
+import { siteConfig } from "../siteConfig";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { withBase } from "@utils/withBase";
+---
+
+<BaseLayout>
+  <main
+    class="grow pt-28 lg:pt-32 pb-12 px-6 max-w-3xl mx-auto w-full prose dark:prose-invert prose-a:text-primary"
+  >
+    <a class="text-sm no-underline hover:underline" href={withBase("/projects")}
+      >Projects</a
+    >
+    <h1 class="font-heading tracking-tighter">About JOSH</h1>
+    <p class="lead">
+      {siteConfig.name} (JOSH) is a catalogue of open source hardware developed
+      by teams at Janelia Research Campus.
+    </p>
+
+    <h2>What you will find here</h2>
+    <p>
+      Each project has a page describing the hardware and linking to where its
+      design files are hosted, which may be GitHub, Figshare or another site.
+      Where a project has a Figshare record, the page also shows its authors,
+      DOI and a ready-made citation, so the design can be cited when it is used.
+    </p>
+    <p>
+      Projects are tagged so you can check what you need before you download
+      anything:
+    </p>
+    <ul>
+      <li>
+        <strong>File types</strong> lists the formats in the download. Proprietary
+        formats are marked "(proprietary)".
+      </li>
+      <li><strong>License</strong> says how the design may be used.</li>
+      <li>
+        <strong>CAD/EDA</strong> names the design tools the files were made with.
+      </li>
+      <li>
+        <strong>Hardware type</strong>, <strong>use case</strong> and
+        <strong>development team</strong> help you find related designs.
+      </li>
+    </ul>
+    <p>
+      Browse the <a href={withBase("/projects")}>card view</a> to filter and
+      search, or use the <a href={withBase("/projects-table")}>table view</a> to
+      scan every project in one list.
+    </p>
+
+    <h2>Add your hardware</h2>
+    <p>
+      We welcome contributions from current and former Janelians. To add a
+      project, contact <a href={`mailto:${siteConfig.contactEmail}`}
+        >{siteConfig.contactEmail}</a
+      >.
+    </p>
+  </main>
+</BaseLayout>

@@ -1,12 +1,12 @@
 export const headerData = {
   links: [
     {
-      text: "Home",
-      href: "/",
-    },
-    {
       text: "Projects",
       href: `/projects`,
+    },
+    {
+      text: "Table view",
+      href: `/projects-table`,
     },
   ],
 };
@@ -14,6 +14,10 @@ export const headerData = {
 export const footerData = {
   links: [],
   secondaryLinks: [
+    {
+      text: "About JOSH",
+      href: "/about",
+    },
     {
       text: "Privacy Policy & Cookie Notice",
       href: "https://www.hhmi.org/privacy-policy",

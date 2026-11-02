@@ -1,54 +1,22 @@
 ---
-import { siteConfig } from "../siteConfig";
-import BaseLayout from "@layouts/BaseLayout.astro";
-import Hero from "@components/Hero";
-import CallToAction from "@components/CallToAction.astro";
-import Wrapper from "@components/Wrapper.astro";
+// /projects is the main page; the root URL just forwards there immediately.
 import { withBase } from "@utils/withBase";
+
+const target = withBase("/projects");
 ---
 
-<BaseLayout>
-  <Hero
-    client:load
-    title={siteConfig.name}
-    subtitle="Open source hardware designed at Janelia Research Campus"
-    heightClasses="h-[calc(100vh-60px)] sm:h-[calc(100vh-88px)] min-h-[588px]"
-  >
-    <Wrapper containerClass="max-w-5xl md:px-6 lg:px-12 xl:px-16">
-      <div class="max-w-3xl rounded-md">
-        <CallToAction
-          btnContainerClasses="max-w-none sm:max-w-none pb-2"
-          actions={[
-            {
-              variant: "primary",
-              text: `Explore hardware projects`,
-              href: withBase("/projects"),
-            },
-          ]}
-        >
-          <Fragment slot="content">
-            This website catalogues open source hardware developed by teams at
-            Janelia Research Campus, so that others can find, build and cite
-            their designs.
-          </Fragment>
-        </CallToAction>
-      </div>
-    </Wrapper>
-  </Hero>
-
-  <Wrapper containerClass="py-4 sm:py-8 md:py-12">
-    <CallToAction
-    >
-      <Fragment slot="bg">
-        <div class="absolute inset-0 bg-blue-50 dark:bg-slate-900"></div>
-      </Fragment>
-      <Fragment slot="title"
-        >Janelians: add your hardware to this website!</Fragment
-      >
-      <Fragment slot="content">
-        We welcome contributions from current and former Janelians. Contact
-        laym@janelia.hhmi.org to add a page about your hardware project.
-      </Fragment>
-    </CallToAction>
-  </Wrapper>
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Janelia Open Source Hardware</title>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ target }}>
+      window.location.replace(target);
+    </script>
+  </head>
+  <body>
+    <a href={target}>Continue to the projects page</a>
+  </body>
+</html>

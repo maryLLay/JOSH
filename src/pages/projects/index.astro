@@ -4,7 +4,6 @@ import { siteConfig } from "../../siteConfig";
 import { getCollection } from "astro:content";
 
 import BaseLayout from "@layouts/BaseLayout.astro";
-import Hero from "@components/Hero.jsx";
 import CardContainer from "@components/projects/CardContainer";
 import CardContent from "@components/projects/CardContent.astro";
 import CardImage from "@components/projects/CardImage";
@@ -12,6 +11,7 @@ import FilterMenu from "@components/projects/FilterMenu";
 import ProjectCount from "@components/projects/ProjectCount";
 import SearchInput from "@components/projects/SearchInput";
 import Tag from "@components/projects/Tag.astro";
+import ViewToggle from "@components/ViewToggle.astro";
 import ToggleFilterMenuBtn from "@components/projects/ToggleFilterMenuBtn";
 
 import { withBase } from "@utils/withBase";
@@ -26,16 +26,29 @@ const uniqueTags = getTagKeysAndValues(allProjects);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <Hero
-    client:load
-    title=`${siteConfig.shortName} Projects`
-    subtitle=`Open source hardware projects developed at Janelia Research Campus`
-    heightClasses="h-96"
-    paddingClasses="md:px-6 lg:px-20 xl:px-32 lg:mx-0 max-w-7xl"
-    captionAlignment="lg:left-20 xl:left-32"
-  />
+  <header class="px-6 lg:px-20 xl:px-32 pt-28 lg:pt-32">
+    <h1
+      class="text-4xl sm:text-5xl font-bold leading-tighter tracking-tighter font-heading"
+    >
+      {siteConfig.name}
+    </h1>
+    <p class="mt-3 max-w-3xl text-xl text-muted dark:text-slate-400">
+      {siteConfig.tagline}. Find designs to build, see which file types and
+      tools they need, and cite them.
+    </p>
+    <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <ViewToggle current="cards" />
+      <a class="underline hover:text-primary" href={withBase("/about")}
+        >About JOSH</a
+      >
+      <a
+        class="underline hover:text-primary"
+        href={`mailto:${siteConfig.contactEmail}`}>Add your hardware</a
+      >
+    </div>
+  </header>
   <section
-    class="px-6 lg:px-20 xl:px-32 py-6 md:py-12 lg:py-20 w-full max-w-6xl lg:max-w-none 2xl:w-11/12 md:grid grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4"
+    class="px-6 lg:px-20 xl:px-32 py-6 md:py-10 w-full max-w-6xl lg:max-w-none 2xl:w-11/12 md:grid grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-5 gap-4"
   >
     <div class="col-start-1 col-span-1">
       <SearchInput client:load />

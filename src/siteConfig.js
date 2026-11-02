@@ -3,4 +3,6 @@ export const siteConfig = {
   shortName: "Janelia JOSH",
   acronymOnly: "JOSH",
   icon: "🔧",
+  tagline: "Open source hardware designed at Janelia Research Campus",
+  contactEmail: "laym@janelia.hhmi.org",
 };

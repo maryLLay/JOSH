@@ -10,7 +10,7 @@ const currentYear = new Date().getFullYear();
 ---
 
 <footer
-  class="relative border-t border-gray-200 dark:border-slate-800 not-prose"
+  class="print:hidden relative border-t border-gray-200 dark:border-slate-800 not-prose"
 >
   <div
     class="bg-blue-50 dark:bg-slate-900 absolute inset-0 pointer-events-none"
@@ -33,9 +33,9 @@ const currentYear = new Date().getFullYear();
             footerData.secondaryLinks.map(({ text, href }) => (
               <a
                 class="text-muted hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out mr-2 rtl:mr-0 rtl:ml-2"
-                href={href}
+                href={/^https?:/.test(href) ? href : withBase(href)}
                 set:html={text}
-                target="_blank"
+                target={/^https?:/.test(href) ? "_blank" : undefined}
               />
             ))
           }
