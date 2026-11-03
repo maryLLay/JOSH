@@ -3,6 +3,7 @@
     "STEP",
     "STL",
     "DXF",
+    "IGES",
     "SVG",
     "PDF drawings",
     "Gerber",
@@ -18,6 +19,7 @@
     "Zemax OpticStudio (proprietary)"
   ],
   "license": [
+    "Janelia Open-Source Hardware License",
     "CERN-OHL-S-2.0",
     "CERN-OHL-W-2.0",
     "CERN-OHL-P-2.0",
@@ -26,10 +28,10 @@
     "CC-BY-4.0",
     "CC-BY-SA-4.0",
     "CC-BY-NC-4.0",
+    "BSD-3-Clause",
     "MIT",
     "Apache-2.0",
     "GPL-3.0",
-    "Non-commercial research use (commercial license available)",
     "Other (see project page)"
   ],
   "hardware type": [
@@ -70,6 +72,7 @@
     "Animal positioning and head fixation",
     "Electrophysiology",
     "Sample preparation",
+    "Surgery and injection",
     "Optical alignment and testing",
     "Lab automation"
   ]

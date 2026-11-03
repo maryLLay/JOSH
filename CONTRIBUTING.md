@@ -14,7 +14,6 @@ How to add or edit a hardware project on the JOSH website. Each project is one M
 - [Optional: project description and image](#optional-project-description-and-image)
 - [Preview your page](#preview-your-page)
 - [Open a pull request](#open-a-pull-request)
-- [Removing the placeholder projects](#removing-the-placeholder-projects)
 
 ## Quick reference
 
@@ -146,7 +145,3 @@ If you added an image, also run `git add public/project-images/YOUR-IMAGE-FILE`.
 An automated check then validates your tags. If it finds a problem, it posts a comment on your pull request. Fix the file, then commit and push again. The changes are added to the open pull request, and a success comment appears once the tags are valid.
 
 The maintainers may ask for changes before approving your pull request. Thank you for contributing!
-
-## Removing the placeholder projects
-
-The three `src/content/projects/placeholder-*.md` files are examples used during development, with illustrative tags. Delete them once real projects have been added.

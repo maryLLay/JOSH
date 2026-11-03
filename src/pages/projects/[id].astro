@@ -91,7 +91,7 @@ const contentLabel = hasBody
       />
       <ProjectPageTabs client:load contentLabel={contentLabel}>
         <div slot="overview">
-          <RepoInfo repoInfo={repoInfo} />
+          <RepoInfo repoInfo={repoInfo} hideLicense={Boolean(frontmatter.license)} />
           <DevelopmentTeam team={labInfoArray} />
           <License license={frontmatter.license} />
           <ExternalLinks frontmatter={frontmatter} />

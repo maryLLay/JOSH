@@ -2,7 +2,8 @@ import yaml from "yaml";
 import { readFileSync, writeFileSync } from "fs";
 import validTagsList from "./validTagsList.json" with { type: "json" };
 
-const changedFiles = process.env.CHANGED_FILES.split(" ");
+// Ignore blank entries (e.g. from a trailing space in the file list)
+const changedFiles = process.env.CHANGED_FILES.split(/\s+/).filter(Boolean);
 console.log("changed files: ", changedFiles);
 // GITHUB_REPOSITORY is set automatically when this runs in GitHub Actions
 const validTagsListUrl = process.env.GITHUB_REPOSITORY

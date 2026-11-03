@@ -1,6 +1,8 @@
 ---
 import Link from "@components/Link.astro";
-const { repoInfo } = Astro.props;
+const { repoInfo, hideLicense = false } = Astro.props;
+// hideLicense: the project file sets its own license tag, which takes priority
+// (a Figshare record can only use a standard license, e.g. CC BY 4.0).
 
 const formatDate = (iso) =>
   iso
@@ -40,7 +42,7 @@ const formatDate = (iso) =>
           />
         </div>
       ) : null}
-      {repoInfo.license ? (
+      {repoInfo.license && !hideLicense ? (
         <div class="flex flex-wrap gap-x-3">
           <p class="font-semibold">Figshare record license:</p>
           {repoInfo.license.url ? (
