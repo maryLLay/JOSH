@@ -3,6 +3,8 @@ title: "Plexiglass-Drosophila-Hybridization-Dish"
 tagline: "Holder for Coverslips to be Hybridized."
 maintainer: "Jon Arnold"
 repository link: https://janelia.figshare.com/articles/physical_object/Plexiglass-Drosophila-Hybridization-Dish/32325771
+image file: plexiglass-drosophila-hybridization-dish.jpg
+image caption: "Plexiglass-Drosophila-Hybridization-Dish"
 update_date: 2026-05-19
 file types: ["STEP", "Inventor (proprietary)", "PDF drawings"]
 license: ["Janelia Open-Source Hardware License"]

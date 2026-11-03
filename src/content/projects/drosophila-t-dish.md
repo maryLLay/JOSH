@@ -3,6 +3,8 @@ title: "Drosophila Mounting T-Dish"
 tagline: "Arrangement of Drosophila CNS samples on a slide."
 maintainer: "Jon Arnold"
 repository link: https://janelia.figshare.com/articles/physical_object/Drosophila_Mounting_T-Dish/30601730
+image file: drosophila-t-dish.png
+image caption: "Drosophila Mounting T-Dish"
 update_date: 2025-11-12
 file types: ["STEP", "DXF", "Inventor (proprietary)", "DWG (proprietary)", "PDF drawings"]
 license: ["Janelia Open-Source Hardware License"]

@@ -3,6 +3,8 @@ title: "Non-condensing cooling plate"
 tagline: "Cooling plate that keeps the working surface completely dry and cool."
 maintainer: "Jeff Jordan"
 repository link: https://janelia.figshare.com/articles/physical_object/Non-condensing_cooling_plate/31972878
+image file: non-condensing-cooling-plate.png
+image caption: "Non-condensing cooling plate"
 update_date: 2026-04-09
 file types: ["STEP", "Inventor (proprietary)", "PDF drawings"]
 license: ["Janelia Open-Source Hardware License"]

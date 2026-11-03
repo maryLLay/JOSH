@@ -3,6 +3,8 @@ title: "miniBCS Behavioral Control System"
 tagline: "Configurable I/O PCB for Teensy 4.1 and Max11300."
 maintainer: "Steven Sawtelle"
 repository link: https://janelia.figshare.com/articles/physical_object/miniBCS_Behavioral_Control_System/29669162
+image file: minibcs-4.png
+image caption: "miniBCS Behavioral Control System"
 update_date: 2026-05-04
 file types: ["DXF", "Eagle (proprietary)", "Firmware source", "PDF drawings"]
 license: ["BSD-3-Clause"]
