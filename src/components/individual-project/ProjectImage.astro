@@ -1,0 +1,27 @@
+---
+import { withBase } from "@utils/withBase";
+
+// Shown in the project page sidebar. Renders nothing when the project has no image.
+const { file, caption, title } = Astro.props;
+
+// The caption is the image's alt text. It is also shown under the image when it
+// says something other than the project title.
+const showCaption = caption && caption.trim() !== title.trim();
+---
+
+{
+  file ? (
+    <figure class="mt-8 mb-0 px-6">
+      <img
+        src={withBase(`/project-images/${file}`)}
+        alt={caption || title}
+        class="block w-full h-auto max-h-96 object-contain rounded-md border border-gray-200 dark:border-slate-700 bg-white"
+      />
+      {showCaption ? (
+        <figcaption class="mt-2 text-sm text-muted dark:text-slate-400">
+          {caption}
+        </figcaption>
+      ) : null}
+    </figure>
+  ) : null
+}

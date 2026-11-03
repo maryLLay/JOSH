@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 
 import BaseLayout from "@layouts/BaseLayout.astro";
 import QuickLinks from "@components/individual-project/QuickLinks.astro";
+import ProjectImage from "@components/individual-project/ProjectImage.astro";
 import Youtube from "@components/individual-project/Youtube.astro";
 import DevelopmentTeam from "@components/individual-project/DevelopmentTeam.astro";
 import ProjectPageTabs from "@components/individual-project/Tabs";
@@ -82,6 +83,11 @@ const contentLabel = hasBody
       class="col-start-4 col-span-2 row-start-2 row-span-2 px-6 py-12 lg:p-0 lg:pl-12 bg-primary bg-opacity-20 lg:bg-page lg:bg-opacity-0"
     >
       <QuickLinks frontmatter={frontmatter} repoInfo={repoInfo} />
+      <ProjectImage
+        file={frontmatter["image file"]}
+        caption={frontmatter["image caption"]}
+        title={frontmatter.title}
+      />
     </div>
     <div class="col-start-1 col-span-3 mx-6">
       <Youtube

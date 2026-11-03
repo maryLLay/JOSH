@@ -26,7 +26,7 @@ additional links text array:
     Etc.,
   ]
 image file: optional-file-name.jpg
-image caption: Required if you provide an image file
+image caption: "Required if you provide an image file. Used as the image's alt text, and shown under the image if it differs from the project title."
 youtube url: https://optional-youtube-url.com
 youtube caption: Required if you provide a youtube url
 youtube params: "Optional. Supports any YouTube params: https://developers.google.com/youtube/player_parameters#Parameters. See Astro Embed documentation for more guidance: https://astro-embed.netlify.app/components/youtube/#params"

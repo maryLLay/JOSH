@@ -79,8 +79,8 @@ Follow the examples in `_project-template.md`.
 | `how to cite link` | Optional | A DOI link, starting `https://doi.org/`. Only used together with `how to cite text`. |
 | `additional links array` | Optional | Extra links as a list, for example a project homepage or a publication. Wrap links containing a colon in quotes. |
 | `additional links text array` | Optional | The display text for each extra link, in the same order. |
-| `image file` | Optional | The file name of an image in `public/project-images/`, with no spaces. One image is supported. |
-| `image caption` | Required if you add an image | A short description of the image. |
+| `image file` | Optional | The file name of an image in `public/project-images/`, with no spaces. One image is supported. It appears on the project's card and in the sidebar of the project page. |
+| `image caption` | Required if you add an image | A short description of the image. It is the image's alt text, and is shown under the image if it differs from the project title. |
 | `youtube url` | Optional | Link to a YouTube video. |
 | `youtube caption` | Required if you add a video | A short description of the video. |
 | `youtube params` | Optional | Any [YouTube player parameters](https://developers.google.com/youtube/player_parameters#Parameters). |
@@ -119,7 +119,7 @@ Tags let visitors filter projects. The tag fields are `file types`, `license`, `
 
 **Description.** Leave the body of your project file empty to show the fetched README or description. To write your own, type Markdown below the closing `---` ([Markdown syntax guide](https://www.markdownguide.org/basic-syntax/)). If the template's instruction text is still there, it is ignored.
 
-**Image.** Add the image to `public/project-images/` with a file name without spaces, then set `image file` and `image caption`. The image is used on the project's card.
+**Image.** Add the image to `public/project-images/` with a file name without spaces, then set `image file` and `image caption`. The image is used on the project's card and on its page.
 
 ## Preview your page
 
