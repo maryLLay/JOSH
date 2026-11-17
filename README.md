@@ -33,5 +33,5 @@ This site is licensed under the [3-clause BSD license](LICENSE).
 ## Acknowledgments
 
 - This site is adapted from the [Janelia Open Science Software Initiative website](https://github.com/JaneliaSciComp/ossi-website).
-- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSE-MIT.md).
+- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSES/MIT.txt).
 - The GitHub action validating tags in the project frontmatter was heavily inspired by [lint-md-fm](https://github.com/timhagn/lint-md-fm) and [Flinter](https://github.com/JackDevAU/Flinter).
