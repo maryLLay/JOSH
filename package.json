@@ -2,6 +2,7 @@
   "name": "josh-website",
   "type": "module",
   "version": "0.0.1",
+  "license": "BSD-3-Clause",
   "scripts": {
     "dev": "astro dev --open",
     "build": "astro build",
