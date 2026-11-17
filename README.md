@@ -32,8 +32,8 @@ Different parts of this repository are under different terms.
 
 | What | License |
 | :-- | :-- |
-| The website's source code and documentation | [3-clause BSD](LICENSE-3-clause-BSD.md), Copyright © HHMI |
-| Files adapted from the [AstroWind](https://github.com/onwidget/astrowind) template: `src/components/Header.astro`, `src/components/Footer.astro`, `src/components/ToggleTheme.astro`, `src/styles/CustomStyles.astro` and `src/styles/tailwind.css` | [MIT](LICENSE-MIT.md), Copyright © 2023 onWidget (the MIT notice must be kept with these files) |
+| The website's source code and documentation | [3-clause BSD](LICENSE), Copyright © HHMI |
+| Files adapted from the [AstroWind](https://github.com/onwidget/astrowind) template: `src/components/Header.astro`, `src/components/Footer.astro`, `src/components/ToggleTheme.astro`, `src/styles/CustomStyles.astro` and `src/styles/tailwind.css` | [MIT](LICENSES/MIT.txt), Copyright © 2023 onWidget (the MIT notice must be kept with these files) |
 | HHMI and Janelia logos (`src/assets/images`) | Trademarks of HHMI, not covered by the BSD license |
 | The two `*-unsplash.jpg` placeholder images in `public/project-images` | [Unsplash License](https://unsplash.com/license) |
 | Other project images, and each project's description, README and design files | Belong to their project's authors and are shared under the license shown on each project page |
@@ -43,5 +43,5 @@ Hardware designs listed on the site are **not** covered by this repository's lic
 ## Acknowledgments
 
 - This site is adapted from the [Janelia Open Science Software Initiative website](https://github.com/JaneliaSciComp/ossi-website).
-- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSE-MIT.md).
+- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSES/MIT.txt).
 - The GitHub action validating tags in the project frontmatter was heavily inspired by [lint-md-fm](https://github.com/timhagn/lint-md-fm) and [Flinter](https://github.com/JackDevAU/Flinter).
