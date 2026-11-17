@@ -26,12 +26,22 @@ A weekly workflow (`.github/workflows/update-project-dates.yml`) fills in each p
 
 The deploy workflow publishes to GitHub Pages on every push to `main` and rebuilds nightly so fetched content stays current. If the site is served from a repository subpath (`https://<org>.github.io/<repo>/`), the base path is applied automatically. For a custom domain, configure it in the repository's Pages settings (plus a DNS record); the workflow picks up the site URL automatically. Update the placeholder `site` in `astro.config.mjs` to match, for local builds.
 
-## License
+## Licensing
 
-This site is licensed under the [3-clause BSD license](LICENSE-3-clause-BSD.md).
+Different parts of this repository are under different terms.
+
+| What | License |
+| :-- | :-- |
+| The website's source code and documentation | [3-clause BSD](LICENSE), Copyright © HHMI |
+| Files adapted from the [AstroWind](https://github.com/onwidget/astrowind) template: `src/components/Header.astro`, `src/components/Footer.astro`, `src/components/ToggleTheme.astro`, `src/styles/CustomStyles.astro` and `src/styles/tailwind.css` | [MIT](LICENSES/MIT.txt), Copyright © 2023 onWidget (the MIT notice must be kept with these files) |
+| HHMI and Janelia logos (`src/assets/images`) | Trademarks of HHMI, not covered by the BSD license |
+| The two `*-unsplash.jpg` placeholder images in `public/project-images` | [Unsplash License](https://unsplash.com/license) |
+| Other project images, and each project's description, README and design files | Belong to their project's authors and are shared under the license shown on each project page |
+
+Hardware designs listed on the site are **not** covered by this repository's license. Each project page shows its own license, and some projects may not meet the [OSHWA open source hardware definition](https://oshwa.org/resources/open-source-hardware-definition/).
 
 ## Acknowledgments
 
 - This site is adapted from the [Janelia Open Science Software Initiative website](https://github.com/JaneliaSciComp/ossi-website).
-- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSE-MIT.md).
+- It uses components and styling from the [Astrowind](https://github.com/onwidget/astrowind/tree/main) template. AstroWind is licensed under the [MIT license](LICENSES/MIT.txt).
 - The GitHub action validating tags in the project frontmatter was heavily inspired by [lint-md-fm](https://github.com/timhagn/lint-md-fm) and [Flinter](https://github.com/JackDevAU/Flinter).
