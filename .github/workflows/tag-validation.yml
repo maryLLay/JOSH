@@ -25,7 +25,7 @@ jobs:
           git fetch --no-tags origin "pull/${PR_NUMBER}/merge"
           # Merge commit's first parent is the base branch tip.
           changed=$(git diff --name-only --diff-filter=AM FETCH_HEAD^1 FETCH_HEAD -- '*.md' '*.mdx' \
-            | grep -v -E '(^|/)(_project-template\.md|tagsList\.md|README\.md|CONTRIBUTING\.md|LICENSE-3-clause-BSD\.md|LICENSE-MIT\.md)$' || true)
+            | grep -v -E '(^|/)(_project-template\.md|tagsList\.md|README\.md|CONTRIBUTING\.md|LICENSE-MIT\.md)$' || true)
           if [ -n "$changed" ]; then
             echo "$changed" | xargs git checkout FETCH_HEAD --
             echo "any_changed=true" >> "$GITHUB_OUTPUT"

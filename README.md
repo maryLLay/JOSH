@@ -28,7 +28,7 @@ The deploy workflow publishes to GitHub Pages on every push to `main` and rebuil
 
 ## License
 
-This site is licensed under the [3-clause BSD license](LICENSE-3-clause-BSD.md).
+This site is licensed under the [3-clause BSD license](LICENSE).
 
 ## Acknowledgments
 
